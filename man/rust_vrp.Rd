@@ -23,13 +23,13 @@ rust_vrp(
 
 \item{depot}{Depot index (0-based)}
 
-\item{demands}{Demand at each location}
+\item{demands}{Demand at each location (depot demand should be 0)}
 
 \item{capacity}{Vehicle capacity}
 
 \item{max_vehicles}{Maximum number of vehicles (NULL for unlimited)}
 
-\item{method}{Algorithm: "savings" or "2-opt"}
+\item{method}{Algorithm: "savings" (construction only) or "2-opt" (with improvement)}
 
 \item{service_times}{Optional service time at each stop (NULL for zero)}
 
@@ -42,8 +42,10 @@ rust_vrp(
 \item{latest}{Optional latest arrival times at each stop}
 }
 \value{
-List with vehicle assignments, costs, and route details
+List with vehicle assignments, visit orders, costs, and route details
 }
 \description{
-Solve Capacitated Vehicle Routing Problem (CVRP)
+Find minimum-cost routes for multiple vehicles, each with a capacity limit,
+to serve all customers from a depot. Uses Clarke-Wright savings heuristic
+with 2-opt, relocate, and swap improvement.
 }

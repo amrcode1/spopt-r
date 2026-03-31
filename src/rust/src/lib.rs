@@ -753,6 +753,244 @@ fn rust_vrp(
     )
 }
 
+/// Least-cost corridor routing on a raster grid
+///
+/// @param values Flattened cell values (row-major), NaN = impassable
+/// @param n_rows Number of rows in the raster
+/// @param n_cols Number of columns in the raster
+/// @param cell_width Cell width in CRS units
+/// @param cell_height Cell height in CRS units
+/// @param origin_cell 0-based cell index of origin
+/// @param dest_cell 0-based cell index of destination
+/// @param neighbours Cell connectivity: 4, 8, or 16
+/// @param method Routing algorithm: "dijkstra", "bidirectional", or "astar"
+/// @return List with path_cells, total_cost, solve_time_ms, graph_build_time_ms, n_edges
+/// @export
+#[extendr]
+fn rust_corridor(
+    values: Vec<f64>,
+    n_rows: i32,
+    n_cols: i32,
+    cell_width: f64,
+    cell_height: f64,
+    origin_cell: i32,
+    dest_cell: i32,
+    neighbours: i32,
+    method: &str,
+) -> List {
+    if n_rows <= 0 || n_cols <= 0 {
+        extendr_api::throw_r_error(format!(
+            "n_rows and n_cols must be positive, got {} x {}",
+            n_rows, n_cols
+        ));
+    }
+    if !cell_width.is_finite() || cell_width <= 0.0 {
+        extendr_api::throw_r_error(format!(
+            "cell_width must be finite and positive, got {}",
+            cell_width
+        ));
+    }
+    if !cell_height.is_finite() || cell_height <= 0.0 {
+        extendr_api::throw_r_error(format!(
+            "cell_height must be finite and positive, got {}",
+            cell_height
+        ));
+    }
+    let nr = n_rows as usize;
+    let nc = n_cols as usize;
+    let n_cells = nr * nc;
+    if values.len() != n_cells {
+        extendr_api::throw_r_error(format!(
+            "values length ({}) does not match n_rows * n_cols ({})",
+            values.len(),
+            n_cells
+        ));
+    }
+    if neighbours != 4 && neighbours != 8 && neighbours != 16 {
+        extendr_api::throw_r_error(format!(
+            "neighbours must be 4, 8, or 16, got {}",
+            neighbours
+        ));
+    }
+    if method != "dijkstra" && method != "bidirectional" && method != "astar" {
+        extendr_api::throw_r_error(format!(
+            "method must be 'dijkstra', 'bidirectional', or 'astar', got '{}'",
+            method
+        ));
+    }
+    let oc = origin_cell as usize;
+    let dc = dest_cell as usize;
+    if origin_cell < 0 || oc >= n_cells {
+        extendr_api::throw_r_error(format!(
+            "origin_cell {} is out of range [0, {})",
+            origin_cell, n_cells
+        ));
+    }
+    if dest_cell < 0 || dc >= n_cells {
+        extendr_api::throw_r_error(format!(
+            "dest_cell {} is out of range [0, {})",
+            dest_cell, n_cells
+        ));
+    }
+    // Validate all friction values: must be NaN (NA/impassable) or finite and positive
+    for (i, &v) in values.iter().enumerate() {
+        if v.is_nan() {
+            continue; // NA → impassable, allowed
+        }
+        if !v.is_finite() || v <= 0.0 {
+            extendr_api::throw_r_error(format!(
+                "All non-NA values must be finite and positive (> 0). Cell {} has value {}",
+                i, v
+            ));
+        }
+    }
+
+    if values[oc].is_nan() {
+        extendr_api::throw_r_error("origin cell falls on an impassable (NA) cell");
+    }
+    if values[dc].is_nan() {
+        extendr_api::throw_r_error("destination cell falls on an impassable (NA) cell");
+    }
+
+    let result = route::corridor::solve(
+        &values, nr, nc, cell_width, cell_height, oc, dc, neighbours, method,
+    );
+
+    if result.path_cells.is_empty() {
+        extendr_api::throw_r_error(
+            "No path exists between origin and destination. They may be separated by impassable (NA) cells."
+        );
+    }
+
+    let path_cells_i32: Vec<i32> = result.path_cells.iter().map(|&c| c as i32).collect();
+    list!(
+        path_cells = path_cells_i32,
+        total_cost = result.total_cost,
+        solve_time_ms = result.solve_time_ms,
+        graph_build_time_ms = result.graph_build_time_ms,
+        n_edges = result.n_edges as i32
+    )
+}
+
+/// Build a cached corridor graph from a raster grid
+/// @export
+#[extendr]
+fn rust_corridor_build_graph(
+    values: Vec<f64>,
+    n_rows: i32,
+    n_cols: i32,
+    cell_width: f64,
+    cell_height: f64,
+    neighbours: i32,
+) -> ExternalPtr<route::corridor::CorridorGraph> {
+    if n_rows <= 0 || n_cols <= 0 {
+        extendr_api::throw_r_error(format!(
+            "n_rows and n_cols must be positive, got {} x {}", n_rows, n_cols
+        ));
+    }
+    if !cell_width.is_finite() || cell_width <= 0.0 {
+        extendr_api::throw_r_error(format!(
+            "cell_width must be finite and positive, got {}", cell_width
+        ));
+    }
+    if !cell_height.is_finite() || cell_height <= 0.0 {
+        extendr_api::throw_r_error(format!(
+            "cell_height must be finite and positive, got {}", cell_height
+        ));
+    }
+    let nr = n_rows as usize;
+    let nc = n_cols as usize;
+    let n_cells = nr * nc;
+    if values.len() != n_cells {
+        extendr_api::throw_r_error(format!(
+            "values length ({}) does not match n_rows * n_cols ({})",
+            values.len(), n_cells
+        ));
+    }
+    if neighbours != 4 && neighbours != 8 && neighbours != 16 {
+        extendr_api::throw_r_error(format!(
+            "neighbours must be 4, 8, or 16, got {}", neighbours
+        ));
+    }
+    for (i, &v) in values.iter().enumerate() {
+        if v.is_nan() { continue; }
+        if !v.is_finite() || v <= 0.0 {
+            extendr_api::throw_r_error(format!(
+                "All non-NA values must be finite and positive (> 0). Cell {} has value {}", i, v
+            ));
+        }
+    }
+
+    let graph = route::corridor::build_corridor_graph(
+        &values, nr, nc, cell_width, cell_height, neighbours,
+    );
+    ExternalPtr::new(graph)
+}
+
+/// Solve on a cached corridor graph
+/// @export
+#[extendr]
+fn rust_corridor_solve_cached(
+    graph: ExternalPtr<route::corridor::CorridorGraph>,
+    origin_cell: i32,
+    dest_cell: i32,
+    method: &str,
+) -> List {
+    let n_cells = graph.n_rows * graph.n_cols;
+    let oc = origin_cell as usize;
+    let dc = dest_cell as usize;
+    if origin_cell < 0 || oc >= n_cells {
+        extendr_api::throw_r_error(format!(
+            "origin_cell {} is out of range [0, {})", origin_cell, n_cells
+        ));
+    }
+    if dest_cell < 0 || dc >= n_cells {
+        extendr_api::throw_r_error(format!(
+            "dest_cell {} is out of range [0, {})", dest_cell, n_cells
+        ));
+    }
+    if method != "dijkstra" && method != "bidirectional" && method != "astar" {
+        extendr_api::throw_r_error(format!(
+            "method must be 'dijkstra', 'bidirectional', or 'astar', got '{}'", method
+        ));
+    }
+
+    let result = route::corridor::solve_on_graph(&graph, oc, dc, method);
+
+    if result.path_cells.is_empty() {
+        extendr_api::throw_r_error(
+            "No path exists between origin and destination. They may be separated by impassable (NA) cells."
+        );
+    }
+
+    let path_cells_i32: Vec<i32> = result.path_cells.iter().map(|&c| c as i32).collect();
+    list!(
+        path_cells = path_cells_i32,
+        total_cost = result.total_cost,
+        solve_time_ms = result.solve_time_ms,
+        graph_build_time_ms = result.graph_build_time_ms,
+        n_edges = result.n_edges as i32
+    )
+}
+
+/// Get metadata from a cached corridor graph
+/// @export
+#[extendr]
+fn rust_corridor_graph_info(
+    graph: ExternalPtr<route::corridor::CorridorGraph>,
+) -> List {
+    list!(
+        n_rows = graph.n_rows as i32,
+        n_cols = graph.n_cols as i32,
+        cell_width = graph.cell_w,
+        cell_height = graph.cell_h,
+        neighbours = graph.neighbours,
+        n_edges = graph.n_edges() as i32,
+        build_time_ms = graph.build_time_ms,
+        memory_bytes = graph.memory_bytes_estimate() as f64
+    )
+}
+
 // Macro to generate exports
 extendr_module! {
     mod spopt;
@@ -776,4 +1014,8 @@ extendr_module! {
     fn rust_huff;
     fn rust_tsp;
     fn rust_vrp;
+    fn rust_corridor;
+    fn rust_corridor_build_graph;
+    fn rust_corridor_solve_cached;
+    fn rust_corridor_graph_info;
 }

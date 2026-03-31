@@ -100,3 +100,33 @@ summary.spopt_vrp <- function(object, ...) {
 
   invisible(object)
 }
+
+#' @export
+print.spopt_corridor <- function(x, ...) {
+  meta <- attr(x, "spopt")
+  cat("Least-cost corridor\n")
+  cat("  Method:", meta$method, "\n")
+  cat("  Total cost:", round(meta$total_cost, 2), "\n")
+  cat("  Path distance:", round(x$path_dist, 0), "\n")
+  cat("  Cells traversed:", meta$n_cells, "\n")
+  cat("  Sinuosity:", round(x$sinuosity, 3), "\n")
+  cat("  Solve time:", round(meta$solve_time, 3), "s\n")
+  invisible(x)
+}
+
+#' @export
+print.spopt_corridor_graph <- function(x, ...) {
+  meta <- attr(x, "spopt")
+  cat("Corridor graph\n")
+  cat(sprintf("  Grid: %d x %d (%s cells)\n",
+      meta$n_rows, meta$n_cols,
+      format(meta$n_cells_surface, big.mark = ",")))
+  cat(sprintf("  Cell size: %.1f x %.1f\n",
+      meta$cell_size[1], meta$cell_size[2]))
+  cat(sprintf("  Neighbours: %d (%s edges)\n",
+      meta$neighbours,
+      format(meta$n_edges, big.mark = ",")))
+  cat(sprintf("  Build time: %.3fs | Graph storage: ~%.1f MB\n",
+      meta$graph_build_time, meta$graph_storage_mb))
+  invisible(x)
+}
