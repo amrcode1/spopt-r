@@ -1,7 +1,7 @@
 Package: spopt
 Title: Spatial Optimization for Regionalization, Facility Location, and Market Analysis
 Version: 0.1.2
-Date: 2026-03-31
+Date: 2026-04-01
 Authors@R: c(
     person("Kyle", "Walker", , "kyle@walker-data.com", role = c("aut", "cre")),
     person("PySAL Developers", role = "cph",
@@ -11,7 +11,7 @@ Description: Spatial optimization algorithms for regionalization, facility
     location, and market analysis. Includes algorithms for spatial clustering
     (Max-P, AZP, SKATER, SPENC, Ward), optimal facility siting (P-Median,
     P-Center, MCLP, LSCP, CFLP, P-Dispersion, FRLM), market share analysis
-    (Huff model), and route / corridor optimization. 
+    (Huff model), and route / corridor optimization.
     Supports network-based travel times via custom cost matrices.
     Uses a Rust backend via 'extendr' for performance and the 'HiGHS' solver
     for mixed-integer programming.

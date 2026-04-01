@@ -130,3 +130,32 @@ print.spopt_corridor_graph <- function(x, ...) {
       meta$graph_build_time, meta$graph_storage_mb))
   invisible(x)
 }
+
+#' @export
+print.spopt_k_corridors <- function(x, ...) {
+  meta <- attr(x, "spopt")
+  cat("k-Diverse Corridor Routing (spopt)\n")
+  cat(sprintf("  Corridors found: %d of %d requested\n",
+      meta$k_found, meta$k_requested))
+  cat(sprintf("  Penalty: %.1fx within %.1f of each prior path\n",
+      meta$penalty_factor, meta$penalty_radius))
+  routing_time <- meta$total_solve_time + meta$total_graph_build_time
+  cat(sprintf("  Routing time: %.3fs (solve: %.3fs, graph build: %.3fs)\n\n",
+      routing_time, meta$total_solve_time, meta$total_graph_build_time))
+
+  cat(sprintf("  %-4s  %10s  %10s  %9s  %10s  %7s\n",
+      "Rank", "Cost", "Distance", "Sinuosity", "Spacing", "Overlap"))
+  for (i in seq_len(nrow(x))) {
+    row <- x[i, , drop = FALSE]
+    spacing_str <- if (is.na(row$mean_spacing)) "-" else sprintf("%.1f", row$mean_spacing)
+    overlap_str <- if (is.na(row$pct_overlap)) "-" else sprintf("%.1f%%", row$pct_overlap * 100)
+    cat(sprintf("  %-4d  %10s  %10.0f  %9.3f  %10s  %7s\n",
+        row$corridor_rank,
+        format(round(row$total_cost, 0), big.mark = ","),
+        row$path_dist,
+        row$sinuosity,
+        spacing_str,
+        overlap_str))
+  }
+  invisible(x)
+}

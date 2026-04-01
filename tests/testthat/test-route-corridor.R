@@ -4,18 +4,7 @@ skip_if_not_installed("sf")
 library(terra)
 library(sf)
 
-# Helper: create a projected raster with uniform values
-make_test_raster <- function(nrow = 50, ncol = 50, vals = 1,
-                             crs = "EPSG:32618") {
-  r <- rast(
-    nrows = nrow, ncols = ncol,
-    xmin = 0, xmax = ncol * 100,
-    ymin = 0, ymax = nrow * 100,
-    crs = crs
-  )
-  values(r) <- vals
-  r
-}
+# make_test_raster() is defined in helper-raster.R
 
 # ---------------------------------------------------------------------------
 # 1. Uniform surface -- path approximates straight line
