@@ -43,6 +43,19 @@ Single- and multi-vehicle routing
 - [`route_vrp()`](https://walker-data.com/spopt-r/reference/route_vrp.md)
   : Vehicle Routing Problem (VRP)
 
+## Corridor Routing
+
+Least-cost path and diverse corridor routing on raster surfaces
+
+- [`route_corridor()`](https://walker-data.com/spopt-r/reference/route_corridor.md)
+  : Least-Cost Corridor Routing
+- [`corridor_graph()`](https://walker-data.com/spopt-r/reference/corridor_graph.md)
+  : Build a Corridor Graph for Cached Routing
+- [`route_k_corridors()`](https://walker-data.com/spopt-r/reference/route_k_corridors.md)
+  : k-Diverse Corridor Routing
+- [`plot(`*`<spopt_k_corridors>`*`)`](https://walker-data.com/spopt-r/reference/plot.spopt_k_corridors.md)
+  : Plot k-Diverse Corridors
+
 ## Market Analysis
 
 Market share and competition modeling

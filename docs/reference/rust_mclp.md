@@ -26,10 +26,6 @@ rust_mclp(cost_matrix, weights, service_radius, n_facilities, fixed_facilities)
 
   Number of facilities to locate
 
-- fixed_facilities:
-
-  Optional indices of pre-selected facilities (1-based, NULL for none)
-
 ## Value
 
 List with selected facilities and coverage

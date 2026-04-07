@@ -143,14 +143,15 @@ print.spopt_k_corridors <- function(x, ...) {
   cat(sprintf("  Routing time: %.3fs (solve: %.3fs, graph build: %.3fs)\n\n",
       routing_time, meta$total_solve_time, meta$total_graph_build_time))
 
-  cat(sprintf("  %-4s  %10s  %10s  %9s  %10s  %7s\n",
-      "Rank", "Cost", "Distance", "Sinuosity", "Spacing", "Overlap"))
+  cat(sprintf("  %-15s  %10s  %10s  %9s  %10s  %7s\n",
+      "", "Cost", "Distance", "Sinuosity", "Spacing", "Overlap"))
   for (i in seq_len(nrow(x))) {
     row <- x[i, , drop = FALSE]
+    label <- if (row$alternative == 1L) "Optimal" else sprintf("Alternative %d", row$alternative - 1L)
     spacing_str <- if (is.na(row$mean_spacing)) "-" else sprintf("%.1f", row$mean_spacing)
     overlap_str <- if (is.na(row$pct_overlap)) "-" else sprintf("%.1f%%", row$pct_overlap * 100)
-    cat(sprintf("  %-4d  %10s  %10.0f  %9.3f  %10s  %7s\n",
-        row$corridor_rank,
+    cat(sprintf("  %-15s  %10s  %10.0f  %9.3f  %10s  %7s\n",
+        label,
         format(round(row$total_cost, 0), big.mark = ","),
         row$path_dist,
         row$sinuosity,

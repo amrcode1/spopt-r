@@ -118,10 +118,10 @@ test_that("print.spopt_k_corridors produces expected output", {
 
   out <- capture.output(print(result))
   expect_true(any(grepl("k-Diverse", out)))
-  expect_true(any(grepl("Rank", out)))
-  # Rank 1 spacing should show "-"
-  rank1_line <- out[grep("^\\s+1\\s", out)]
-  expect_true(grepl("-", rank1_line))
+  expect_true(any(grepl("Optimal", out)))
+  # Optimal spacing should show "-"
+  optimal_line <- out[grep("Optimal", out)]
+  expect_true(grepl("-", optimal_line))
 })
 
 # ---------------------------------------------------------------------------
@@ -133,7 +133,7 @@ test_that("result has correct class and columns", {
 
   expect_s3_class(result, "spopt_k_corridors")
   expect_s3_class(result, "sf")
-  expected_cols <- c("corridor_rank", "total_cost", "n_cells", "path_dist",
+  expected_cols <- c("alternative", "total_cost", "n_cells", "path_dist",
                      "straight_line_dist", "sinuosity", "mean_spacing",
                      "pct_overlap", "geometry")
   expect_true(all(expected_cols %in% names(result)))
@@ -147,7 +147,7 @@ test_that("k=1 returns correct format", {
   result <- route_k_corridors(r, c(200, 200), c(1800, 1800), k = 1L)
 
   expect_equal(nrow(result), 1)
-  expect_equal(result$corridor_rank, 1L)
+  expect_equal(result$alternative, 1L)
   expect_true(is.na(result$mean_spacing))
   expect_true(is.na(result$pct_overlap))
 })

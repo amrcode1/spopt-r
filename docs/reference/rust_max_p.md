@@ -70,11 +70,6 @@ rust_max_p(
 
   Random seed
 
-- homogeneous:
-
-  Whether to maximize homogeneity (the default), or heterogeneity (if
-  set to FALSE).
-
 - compact:
 
   Whether to optimize for compactness

@@ -34,6 +34,8 @@ navbar:
         href: articles/huff-model.html
       - text: Route Optimization
         href: articles/routing.html
+      - text: Corridor Routing
+        href: articles/corridor-routing.html
       - text: "---"
       - text: Travel-Time Cost Matrices
         href: articles/travel-time-matrices.html
@@ -65,6 +67,14 @@ reference:
   contents:
   - route_tsp
   - route_vrp
+
+- title: Corridor Routing
+  desc: Least-cost path and diverse corridor routing on raster surfaces
+  contents:
+  - route_corridor
+  - corridor_graph
+  - route_k_corridors
+  - plot.spopt_k_corridors
 
 - title: Market Analysis
   desc: Market share and competition modeling
@@ -102,6 +112,7 @@ articles:
   - facility-location
   - huff-model
   - routing
+  - corridor-routing
 
 - title: Advanced Topics
   navbar: ~

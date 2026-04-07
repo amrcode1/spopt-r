@@ -1,6 +1,8 @@
 # Solve Capacitated Vehicle Routing Problem (CVRP)
 
-Solve Capacitated Vehicle Routing Problem (CVRP)
+Find minimum-cost routes for multiple vehicles, each with a capacity
+limit, to serve all customers from a depot. Uses Clarke-Wright savings
+heuristic with 2-opt, relocate, and swap improvement.
 
 ## Usage
 
@@ -32,7 +34,7 @@ rust_vrp(
 
 - demands:
 
-  Demand at each location
+  Demand at each location (depot demand should be 0)
 
 - capacity:
 
@@ -44,7 +46,7 @@ rust_vrp(
 
 - method:
 
-  Algorithm: "savings" or "2-opt"
+  Algorithm: "savings" (construction only) or "2-opt" (with improvement)
 
 - service_times:
 
@@ -68,4 +70,4 @@ rust_vrp(
 
 ## Value
 
-List with vehicle assignments, costs, and route details
+List with vehicle assignments, visit orders, costs, and route details

@@ -34,6 +34,9 @@ Read through these vignettes to learn how to use the package:
 - [Routing
   optimization](https://walker-data.com/spopt-r/articles/routing.html)
 
+- [Corridor routing on cost
+  rasters](https://walker-data.com/spopt-r/articles/corridor-routing.html)
+
 ## Support and how to learn more
 
 If you find this project useful in your work and would like to ensure

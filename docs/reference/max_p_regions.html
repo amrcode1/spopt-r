@@ -13,7 +13,7 @@ population or sample size requirements."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">spopt</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,6 +30,7 @@ population or sample size requirements."><meta property="og:image" content="http
     <li><a class="dropdown-item" href="../articles/facility-location.html">Facility Location</a></li>
     <li><a class="dropdown-item" href="../articles/huff-model.html">Huff Model</a></li>
     <li><a class="dropdown-item" href="../articles/routing.html">Route Optimization</a></li>
+    <li><a class="dropdown-item" href="../articles/corridor-routing.html">Corridor Routing</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/travel-time-matrices.html">Travel-Time Cost Matrices</a></li>
   </ul></li>
@@ -266,7 +267,7 @@ Transactions in GIS, 26, 717-734. <a href="https://doi.org/10.1111/tgis.12874" c
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">result_compact</span>, <span class="st">"spopt"</span><span class="op">)</span><span class="op">$</span><span class="va">mean_compactness</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot results</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span><span class="op">[</span><span class="st">".region"</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span><span class="op">[</span><span class="st">".region"</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Point-based regionalization (e.g., store locations, sensor networks)</span></span></span>
 <span class="r-in"><span><span class="co"># Use KNN weights since points don't have polygon contiguity</span></span></span>
