@@ -14,8 +14,6 @@ rust_mclp(cost_matrix, weights, service_radius, n_facilities, fixed_facilities)
 \item{service_radius}{Maximum service distance}
 
 \item{n_facilities}{Number of facilities to locate}
-
-\item{fixed_facilities}{Optional indices of pre-selected facilities (1-based, NULL for none)}
 }
 \value{
 List with selected facilities and coverage

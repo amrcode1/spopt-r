@@ -24,7 +24,7 @@ rust_p_median(cost_matrix, weights, n_facilities, fixed_facilities)
 
 - fixed_facilities:
 
-  Optional indices of pre-selected facilities (1-based, NULL for none)
+  Optional indices of pre-selected facilities (1-based)
 
 ## Value
 

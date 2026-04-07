@@ -3,10 +3,10 @@
 Spatial optimization algorithms for regionalization, facility location,
 and market analysis. Includes algorithms for spatial clustering (Max-P,
 AZP, SKATER, SPENC, Ward), optimal facility siting (P-Median, P-Center,
-MCLP, LSCP, CFLP, P-Dispersion, FRLM), and market share analysis (Huff
-model). Supports network-based travel times via custom cost matrices.
-Uses a Rust backend via 'extendr' for performance and the 'HiGHS' solver
-for mixed-integer programming.
+MCLP, LSCP, CFLP, P-Dispersion, FRLM), market share analysis (Huff
+model), and route / corridor optimization. Supports network-based travel
+times via custom cost matrices. Uses a Rust backend via 'extendr' for
+performance and the 'HiGHS' solver for mixed-integer programming.
 
 ## See also
 

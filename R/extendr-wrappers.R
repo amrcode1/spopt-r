@@ -128,7 +128,6 @@ rust_ward_constrained <- function(attrs, n_regions, adj_i, adj_j) .Call(wrap__ru
 #' @param cooling_rate SA cooling rate (e.g., 0.99)
 #' @param tabu_length Tabu list length for SA
 #' @param seed Random seed
-#' @param homogeneous Whether to maximize homogeneity (the default), or heterogeneity (if set to FALSE).
 #' @param compact Whether to optimize for compactness
 #' @param compact_weight Weight for compactness vs dissimilarity (0-1)
 #' @param compact_metric Compactness metric to use, either "centroid" or "nmi" (normalized moment of inertia)
@@ -145,7 +144,7 @@ rust_max_p <- function(attrs, threshold_var, threshold, adj_i, adj_j, n_iteratio
 #' @param cost_matrix Cost/distance matrix (demand x facilities)
 #' @param weights Demand weights
 #' @param n_facilities Number of facilities to locate (p)
-#' @param fixed_facilities Optional indices of pre-selected facilities (1-based, NULL for none)
+#' @param fixed_facilities Optional indices of pre-selected facilities (1-based)
 #' @return List with selected facilities and assignments
 #' @export
 rust_p_median <- function(cost_matrix, weights, n_facilities, fixed_facilities) .Call(wrap__rust_p_median, cost_matrix, weights, n_facilities, fixed_facilities)
@@ -164,7 +163,6 @@ rust_lscp <- function(cost_matrix, service_radius) .Call(wrap__rust_lscp, cost_m
 #' @param weights Demand weights
 #' @param service_radius Maximum service distance
 #' @param n_facilities Number of facilities to locate
-#' @param fixed_facilities Optional indices of pre-selected facilities (1-based, NULL for none)
 #' @return List with selected facilities and coverage
 #' @export
 rust_mclp <- function(cost_matrix, weights, service_radius, n_facilities, fixed_facilities) .Call(wrap__rust_mclp, cost_matrix, weights, service_radius, n_facilities, fixed_facilities)
@@ -174,7 +172,6 @@ rust_mclp <- function(cost_matrix, weights, service_radius, n_facilities, fixed_
 #' @param cost_matrix Cost/distance matrix (demand x facilities)
 #' @param n_facilities Number of facilities to locate
 #' @param method Algorithm method: "binary_search" (default) or "mip"
-#' @param fixed_facilities Optional indices of pre-selected facilities (1-based, NULL for none)
 #' @return List with selected facilities, assignments, and max distance
 #' @export
 rust_p_center <- function(cost_matrix, n_facilities, method, fixed_facilities) .Call(wrap__rust_p_center, cost_matrix, n_facilities, method, fixed_facilities)
@@ -227,7 +224,6 @@ rust_cflp <- function(cost_matrix, weights, capacities, n_facilities, facility_c
 #' @export
 rust_huff <- function(cost_matrix, attractiveness, distance_exponent, sales_potential) .Call(wrap__rust_huff, cost_matrix, attractiveness, distance_exponent, sales_potential)
 
-
 #' Solve Traveling Salesman Problem (TSP)
 #'
 #' Solve a closed tour, open route, or fixed-end path over a square
@@ -249,19 +245,51 @@ rust_tsp <- function(cost_matrix, start, end, method, earliest, latest, service_
 
 #' Solve Capacitated Vehicle Routing Problem (CVRP)
 #'
+#' Find minimum-cost routes for multiple vehicles, each with a capacity limit,
+#' to serve all customers from a depot. Uses Clarke-Wright savings heuristic
+#' with 2-opt, relocate, and swap improvement.
+#'
 #' @param cost_matrix Square cost/distance matrix (n x n)
 #' @param depot Depot index (0-based)
-#' @param demands Demand at each location
+#' @param demands Demand at each location (depot demand should be 0)
 #' @param capacity Vehicle capacity
 #' @param max_vehicles Maximum number of vehicles (NULL for unlimited)
-#' @param method Algorithm: "savings" or "2-opt"
+#' @param method Algorithm: "savings" (construction only) or "2-opt" (with improvement)
 #' @param service_times Optional service time at each stop (NULL for zero)
 #' @param max_route_time Optional maximum total time per route (NULL for unlimited)
 #' @param balance_time Whether to run route-time balancing phase
 #' @param earliest Optional earliest arrival times at each stop
 #' @param latest Optional latest arrival times at each stop
-#' @return List with vehicle assignments, costs, and route details
+#' @return List with vehicle assignments, visit orders, costs, and route details
 #' @export
 rust_vrp <- function(cost_matrix, depot, demands, capacity, max_vehicles, method, service_times, max_route_time, balance_time, earliest, latest) .Call(wrap__rust_vrp, cost_matrix, depot, demands, capacity, max_vehicles, method, service_times, max_route_time, balance_time, earliest, latest)
+
+#' Least-cost corridor routing on a raster grid
+#'
+#' @param values Flattened cell values (row-major), NaN = impassable
+#' @param n_rows Number of rows in the raster
+#' @param n_cols Number of columns in the raster
+#' @param cell_width Cell width in CRS units
+#' @param cell_height Cell height in CRS units
+#' @param origin_cell 0-based cell index of origin
+#' @param dest_cell 0-based cell index of destination
+#' @param neighbours Cell connectivity: 4, 8, or 16
+#' @param method Routing algorithm: "dijkstra", "bidirectional", or "astar"
+#' @return List with path_cells, total_cost, solve_time_ms, graph_build_time_ms, n_edges
+#' @export
+rust_corridor <- function(values, n_rows, n_cols, cell_width, cell_height, origin_cell, dest_cell, neighbours, method) .Call(wrap__rust_corridor, values, n_rows, n_cols, cell_width, cell_height, origin_cell, dest_cell, neighbours, method)
+
+#' Build a cached corridor graph from a raster grid
+#' @export
+rust_corridor_build_graph <- function(values, n_rows, n_cols, cell_width, cell_height, neighbours) .Call(wrap__rust_corridor_build_graph, values, n_rows, n_cols, cell_width, cell_height, neighbours)
+
+#' Solve on a cached corridor graph
+#' @export
+rust_corridor_solve_cached <- function(graph, origin_cell, dest_cell, method) .Call(wrap__rust_corridor_solve_cached, graph, origin_cell, dest_cell, method)
+
+#' Get metadata from a cached corridor graph
+#' @export
+rust_corridor_graph_info <- function(graph) .Call(wrap__rust_corridor_graph_info, graph)
+
 
 # nolint end

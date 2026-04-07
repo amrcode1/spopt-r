@@ -46,8 +46,6 @@ rust_max_p(
 
 \item{seed}{Random seed}
 
-\item{homogeneous}{Whether to maximize homogeneity (the default), or heterogeneity (if set to FALSE).}
-
 \item{compact}{Whether to optimize for compactness}
 
 \item{compact_weight}{Weight for compactness vs dissimilarity (0-1)}

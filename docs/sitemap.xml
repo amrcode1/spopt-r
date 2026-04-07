@@ -3,6 +3,7 @@
 <url><loc>https://walker-data.com/spopt-r/CONTRIBUTING.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/LICENSE-text.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/LICENSE.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/articles/corridor-routing.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/articles/facility-location.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/articles/getting-started.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/articles/huff-model.html</loc></url>
@@ -14,6 +15,7 @@
 <url><loc>https://walker-data.com/spopt-r/index.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/azp.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/cflp.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/corridor_graph.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/delivery_data.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/distance_matrix.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/distance_matrix_geographic.html</loc></url>
@@ -29,11 +31,18 @@
 <url><loc>https://walker-data.com/spopt-r/reference/p_center.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/p_dispersion.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/p_median.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/plot.spopt_k_corridors.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/route_corridor.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/route_k_corridors.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/route_tsp.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/route_vrp.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/rust_azp.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/rust_cflp.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/rust_connected_components.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/rust_corridor.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/rust_corridor_build_graph.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/rust_corridor_graph_info.html</loc></url>
+<url><loc>https://walker-data.com/spopt-r/reference/rust_corridor_solve_cached.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/rust_distance_matrix_euclidean.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/rust_distance_matrix_manhattan.html</loc></url>
 <url><loc>https://walker-data.com/spopt-r/reference/rust_frlm_greedy.html</loc></url>

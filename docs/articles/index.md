@@ -15,6 +15,8 @@
   model](https://walker-data.com/spopt-r/articles/huff-model.md):
 - [Route optimization with
   spopt](https://walker-data.com/spopt-r/articles/routing.md):
+- [Corridor routing with
+  spopt](https://walker-data.com/spopt-r/articles/corridor-routing.md):
 
 ### Advanced Topics
 

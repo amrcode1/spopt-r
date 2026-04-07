@@ -100,3 +100,63 @@ summary.spopt_vrp <- function(object, ...) {
 
   invisible(object)
 }
+
+#' @export
+print.spopt_corridor <- function(x, ...) {
+  meta <- attr(x, "spopt")
+  cat("Least-cost corridor\n")
+  cat("  Method:", meta$method, "\n")
+  cat("  Total cost:", round(meta$total_cost, 2), "\n")
+  cat("  Path distance:", round(x$path_dist, 0), "\n")
+  cat("  Cells traversed:", meta$n_cells, "\n")
+  cat("  Sinuosity:", round(x$sinuosity, 3), "\n")
+  cat("  Solve time:", round(meta$solve_time, 3), "s\n")
+  invisible(x)
+}
+
+#' @export
+print.spopt_corridor_graph <- function(x, ...) {
+  meta <- attr(x, "spopt")
+  cat("Corridor graph\n")
+  cat(sprintf("  Grid: %d x %d (%s cells)\n",
+      meta$n_rows, meta$n_cols,
+      format(meta$n_cells_surface, big.mark = ",")))
+  cat(sprintf("  Cell size: %.1f x %.1f\n",
+      meta$cell_size[1], meta$cell_size[2]))
+  cat(sprintf("  Neighbours: %d (%s edges)\n",
+      meta$neighbours,
+      format(meta$n_edges, big.mark = ",")))
+  cat(sprintf("  Build time: %.3fs | Graph storage: ~%.1f MB\n",
+      meta$graph_build_time, meta$graph_storage_mb))
+  invisible(x)
+}
+
+#' @export
+print.spopt_k_corridors <- function(x, ...) {
+  meta <- attr(x, "spopt")
+  cat("k-Diverse Corridor Routing (spopt)\n")
+  cat(sprintf("  Corridors found: %d of %d requested\n",
+      meta$k_found, meta$k_requested))
+  cat(sprintf("  Penalty: %.1fx within %.1f of each prior path\n",
+      meta$penalty_factor, meta$penalty_radius))
+  routing_time <- meta$total_solve_time + meta$total_graph_build_time
+  cat(sprintf("  Routing time: %.3fs (solve: %.3fs, graph build: %.3fs)\n\n",
+      routing_time, meta$total_solve_time, meta$total_graph_build_time))
+
+  cat(sprintf("  %-15s  %10s  %10s  %9s  %10s  %7s\n",
+      "", "Cost", "Distance", "Sinuosity", "Spacing", "Overlap"))
+  for (i in seq_len(nrow(x))) {
+    row <- x[i, , drop = FALSE]
+    label <- if (row$alternative == 1L) "Optimal" else sprintf("Alternative %d", row$alternative - 1L)
+    spacing_str <- if (is.na(row$mean_spacing)) "-" else sprintf("%.1f", row$mean_spacing)
+    overlap_str <- if (is.na(row$pct_overlap)) "-" else sprintf("%.1f%%", row$pct_overlap * 100)
+    cat(sprintf("  %-15s  %10s  %10.0f  %9.3f  %10s  %7s\n",
+        label,
+        format(round(row$total_cost, 0), big.mark = ","),
+        row$path_dist,
+        row$sinuosity,
+        spacing_str,
+        overlap_str))
+  }
+  invisible(x)
+}
