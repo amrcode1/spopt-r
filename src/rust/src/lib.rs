@@ -873,7 +873,7 @@ fn rust_corridor(
 }
 
 /// Build a cached corridor graph from a raster grid
-/// @export
+/// @noRd
 #[extendr]
 fn rust_corridor_build_graph(
     values: Vec<f64>,
@@ -928,7 +928,7 @@ fn rust_corridor_build_graph(
 }
 
 /// Solve on a cached corridor graph
-/// @export
+/// @noRd
 #[extendr]
 fn rust_corridor_solve_cached(
     graph: ExternalPtr<route::corridor::CorridorGraph>,
@@ -974,7 +974,7 @@ fn rust_corridor_solve_cached(
 }
 
 /// Get metadata from a cached corridor graph
-/// @export
+/// @noRd
 #[extendr]
 fn rust_corridor_graph_info(
     graph: ExternalPtr<route::corridor::CorridorGraph>,
