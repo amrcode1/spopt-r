@@ -136,7 +136,7 @@ rust_ward_constrained <- function(attrs, n_regions, adj_i, adj_j) .Call(wrap__ru
 #' @param areas Areas of units (for compactness)
 #' @param moments Second areal moments of units (for compactness)
 #' @return List with labels (1-based), n_regions, objective, and compactness
-#' @export
+#' @noRd
 rust_max_p <- function(attrs, threshold_var, threshold, adj_i, adj_j, n_iterations, n_sa_iterations, cooling_rate, tabu_length, seed, homogeneous, compact, compact_weight, compact_metric, centroids_x, centroids_y, areas, moments) .Call(wrap__rust_max_p, attrs, threshold_var, threshold, adj_i, adj_j, n_iterations, n_sa_iterations, cooling_rate, tabu_length, seed, homogeneous, compact, compact_weight, compact_metric, centroids_x, centroids_y, areas, moments)
 
 #' Solve P-Median facility location problem
@@ -164,7 +164,7 @@ rust_lscp <- function(cost_matrix, service_radius) .Call(wrap__rust_lscp, cost_m
 #' @param service_radius Maximum service distance
 #' @param n_facilities Number of facilities to locate
 #' @return List with selected facilities and coverage
-#' @export
+#' @noRd
 rust_mclp <- function(cost_matrix, weights, service_radius, n_facilities, fixed_facilities) .Call(wrap__rust_mclp, cost_matrix, weights, service_radius, n_facilities, fixed_facilities)
 
 #' Solve P-Center facility location problem
@@ -173,7 +173,7 @@ rust_mclp <- function(cost_matrix, weights, service_radius, n_facilities, fixed_
 #' @param n_facilities Number of facilities to locate
 #' @param method Algorithm method: "binary_search" (default) or "mip"
 #' @return List with selected facilities, assignments, and max distance
-#' @export
+#' @noRd
 rust_p_center <- function(cost_matrix, n_facilities, method, fixed_facilities) .Call(wrap__rust_p_center, cost_matrix, n_facilities, method, fixed_facilities)
 
 #' Solve P-Dispersion facility location problem

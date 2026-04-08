@@ -193,7 +193,7 @@ fn rust_lscp(cost_matrix: RMatrix<f64>, service_radius: f64) -> List {
 /// @param service_radius Maximum service distance
 /// @param n_facilities Number of facilities to locate
 /// @return List with selected facilities and coverage
-/// @export
+/// @noRd
 #[extendr]
 fn rust_mclp(
     cost_matrix: RMatrix<f64>,
@@ -214,7 +214,7 @@ fn rust_mclp(
 /// @param n_facilities Number of facilities to locate
 /// @param method Algorithm method: "binary_search" (default) or "mip"
 /// @return List with selected facilities, assignments, and max distance
-/// @export
+/// @noRd
 #[extendr]
 fn rust_p_center(
     cost_matrix: RMatrix<f64>,
@@ -362,7 +362,7 @@ fn rust_azp(
 /// @param areas Areas of units (for compactness)
 /// @param moments Second areal moments of units (for compactness)
 /// @return List with labels (1-based), n_regions, objective, and compactness
-/// @export
+/// @noRd
 #[extendr]
 fn rust_max_p(
     attrs: RMatrix<f64>,
