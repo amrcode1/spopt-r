@@ -11,7 +11,7 @@ template:
 
 home:
   title: spopt
-  description: Spatial optimization for regionalization, facility location, and market analysis in R
+  description: Spatial optimization for regionalization, facility location, route optimization, and corridor routing in R
 
 navbar:
   bg: "#1e3a5f"
