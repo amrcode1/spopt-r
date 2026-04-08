@@ -11,7 +11,8 @@
 # Status check: stop with informative error if solver did not find optimal
 # ---------------------------------------------------------------------------
 .highs_is_optimal <- function(res) {
-  res$status_message == "Optimal"
+  # HiGHS status 7 = kOptimal. Use integer for stability across versions.
+  res$status == 7L
 }
 
 .check_highs_status <- function(res, solver_name) {
