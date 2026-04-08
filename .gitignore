@@ -47,4 +47,8 @@ data-raw/network_settings.json
 data-raw/*.mapdb
 data-raw/*.mapdb.p
 data-raw/r5r-log.log
-data-raw/*.osm.pbf.DS_Store
+data-raw/*.osm.pbf
+
+# macOS metadata
+.DS_Store
+**/.DS_Store
