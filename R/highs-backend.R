@@ -182,3 +182,284 @@
     dims = c(n_con, n_vars)
   )
 }
+
+# ---------------------------------------------------------------------------
+# MCLP: Maximum Coverage Location Problem
+# Maximize weighted demand covered with exactly p facilities.
+# ---------------------------------------------------------------------------
+.solve_mclp <- function(cost_matrix, weights, service_radius, n_facilities,
+                        fixed_facilities) {
+  n_d <- nrow(cost_matrix)
+  n_f <- ncol(cost_matrix)
+  p <- n_facilities
+
+  if (is.null(fixed_facilities)) fixed_facilities <- integer(0)
+
+  # Variables: y[1..n_f] binary, z[n_f+1..n_f+n_d] binary
+  n_vars <- n_f + n_d
+
+  # Objective: maximize sum(weights[i] * z[i])
+  L <- c(rep(0, n_f), weights)
+
+  lower <- rep(0, n_vars)
+  upper <- rep(1, n_vars)
+  lower[fixed_facilities] <- 1
+  types <- rep("I", n_vars)
+
+  # Coverage: a[i,j] = 1 if cost_matrix[i,j] <= service_radius
+  coverage <- cost_matrix <= service_radius
+
+  # Constraints:
+  # 1: sum_j y[j] = p                                   (1 row)
+  # 2: z[i] - sum_j(a[i,j]*y[j]) <= 0 for each i       (n_d rows)
+  n_con <- 1L + n_d
+
+  # Constraint 1: facility count
+  c1_i <- rep(1L, n_f)
+  c1_j <- seq_len(n_f)
+  c1_x <- rep(1, n_f)
+
+  # Constraint 2: z[i] - sum covering y[j] <= 0 (vectorized via coverage matrix)
+  cov_which <- which(coverage, arr.ind = TRUE)  # rows = demand, cols = facility
+  # z[i] coefficient: +1 for each demand
+  c2a_i <- 1L + seq_len(n_d)
+  c2a_j <- n_f + seq_len(n_d)
+  c2a_x <- rep(1, n_d)
+
+  # -a[i,j]*y[j] coefficients: one entry per TRUE in coverage matrix
+  c2b_i <- 1L + cov_which[, 1]       # constraint row = 1 + demand index
+  c2b_j <- cov_which[, 2]            # variable column = facility index
+  c2b_x <- rep(-1, nrow(cov_which))
+
+  A <- Matrix::sparseMatrix(
+    i = c(c1_i, c2a_i, c2b_i),
+    j = c(c1_j, c2a_j, c2b_j),
+    x = c(c1_x, c2a_x, c2b_x),
+    dims = c(n_con, n_vars)
+  )
+
+  lhs <- c(p, rep(-Inf, n_d))
+  rhs <- c(p, rep(0, n_d))
+
+  res <- highs::highs_solve(
+    L = L, lower = lower, upper = upper,
+    A = A, lhs = lhs, rhs = rhs,
+    types = types, maximum = TRUE,
+    control = highs::highs_control(log_to_console = FALSE)
+  )
+
+  .check_highs_status(res, "MCLP")
+
+  sol <- res$primal_solution
+  selected <- which(sol[seq_len(n_f)] > 0.5)
+
+  # Coverage statistics
+  z_sol <- sol[(n_f + 1L):n_vars]
+  covered_weight <- sum(weights[z_sol > 0.5])
+  total_weight <- sum(weights)
+  coverage_pct <- (covered_weight / total_weight) * 100
+
+  list(
+    selected = as.integer(selected),
+    n_selected = length(selected),
+    objective = res$info$objective_function_value,
+    covered_weight = covered_weight,
+    total_weight = total_weight,
+    coverage_pct = coverage_pct
+  )
+}
+
+# ---------------------------------------------------------------------------
+# P-Center: minimize maximum distance from demand to nearest facility.
+# Dispatches to binary_search or MIP method.
+# ---------------------------------------------------------------------------
+.solve_p_center <- function(cost_matrix, n_facilities, method, fixed_facilities) {
+  if (method == "mip") {
+    .solve_p_center_mip(cost_matrix, n_facilities, fixed_facilities)
+  } else {
+    .solve_p_center_bs(cost_matrix, n_facilities, fixed_facilities)
+  }
+}
+
+# Binary search: find minimum feasible distance threshold
+.solve_p_center_bs <- function(cost_matrix, n_facilities, fixed_facilities) {
+  n_d <- nrow(cost_matrix)
+  n_f <- ncol(cost_matrix)
+  p <- n_facilities
+
+  if (is.null(fixed_facilities)) fixed_facilities <- integer(0)
+
+  # Unique sorted distances
+  distances <- sort(unique(as.vector(cost_matrix[is.finite(cost_matrix)])))
+
+  if (length(distances) == 0) {
+    return(list(
+      selected = integer(0), assignments = rep(0L, n_d),
+      n_selected = 0L, objective = NA_real_, max_distance = NA_real_
+    ))
+  }
+
+  # Binary search for minimum feasible threshold
+  lo <- 1L
+  hi <- length(distances)
+  best_selected <- NULL
+  best_threshold <- NA_real_
+
+  while (lo <= hi) {
+    mid <- lo + (hi - lo) %/% 2L
+    threshold <- distances[mid]
+    selected <- .can_cover_with_p(cost_matrix, threshold, p, fixed_facilities)
+
+    if (!is.null(selected)) {
+      best_selected <- selected
+      best_threshold <- threshold
+      if (mid == 1L) break
+      hi <- mid - 1L
+    } else {
+      lo <- mid + 1L
+    }
+  }
+
+  if (is.null(best_selected)) {
+    return(list(
+      selected = integer(0), assignments = rep(0L, n_d),
+      n_selected = 0L, objective = NA_real_, max_distance = NA_real_
+    ))
+  }
+
+  # Assignments: nearest selected facility per demand (vectorized)
+  sel_dists <- cost_matrix[, best_selected, drop = FALSE]
+  assignments <- best_selected[max.col(-sel_dists, ties.method = "first")]
+
+  list(
+    selected = as.integer(best_selected),
+    assignments = as.integer(assignments),
+    n_selected = length(best_selected),
+    objective = best_threshold,
+    max_distance = best_threshold
+  )
+}
+
+# Inner feasibility check: can all demand be covered with exactly p facilities?
+.can_cover_with_p <- function(cost_matrix, threshold, p, fixed_facilities) {
+  n_d <- nrow(cost_matrix)
+  n_f <- ncol(cost_matrix)
+
+  coverage <- cost_matrix <= threshold
+
+  # If any demand has no covering facility, infeasible
+  if (any(rowSums(coverage) == 0)) return(NULL)
+
+  # ILP: y[j] binary, sum y = p, each demand covered
+  lower <- rep(0, n_f)
+  upper <- rep(1, n_f)
+  lower[fixed_facilities] <- 1
+
+  # Constraint 1: sum y = p
+  # Constraint 2+: coverage for each demand
+  A_cov <- coverage
+  storage.mode(A_cov) <- "double"
+
+  # Build full A: row 1 = facility count, rows 2+ = coverage
+  c1_row <- Matrix::sparseMatrix(
+    i = rep(1L, n_f), j = seq_len(n_f), x = rep(1, n_f),
+    dims = c(1L, n_f)
+  )
+  A <- rbind(c1_row, Matrix::Matrix(A_cov, sparse = TRUE))
+
+  lhs <- c(p, rep(1, n_d))
+  rhs <- c(p, rep(Inf, n_d))
+
+  res <- highs::highs_solve(
+    L = rep(0, n_f), lower = lower, upper = upper,
+    A = A, lhs = lhs, rhs = rhs,
+    types = rep("I", n_f), maximum = FALSE,
+    control = highs::highs_control(log_to_console = FALSE)
+  )
+
+  if (res$status_message != "Optimal") return(NULL)
+
+  selected <- which(res$primal_solution > 0.5)
+  if (length(selected) == p) selected else NULL
+}
+
+# MIP: direct minimax formulation
+.solve_p_center_mip <- function(cost_matrix, n_facilities, fixed_facilities) {
+  n_d <- nrow(cost_matrix)
+  n_f <- ncol(cost_matrix)
+  p <- n_facilities
+
+  if (is.null(fixed_facilities)) fixed_facilities <- integer(0)
+
+  # Variables: W (col 1), y[2..n_f+1], x[n_f+2..n_f+1+n_d*n_f]
+  n_vars <- 1L + n_f + n_d * n_f
+  max_dist <- max(cost_matrix)
+
+  # Objective: minimize W
+  L <- c(1, rep(0, n_f + n_d * n_f))
+
+  lower <- rep(0, n_vars)
+  upper <- c(max_dist * 2, rep(1, n_f + n_d * n_f))
+  lower[1L + fixed_facilities] <- 1  # y offset by 1 for W
+
+  types <- c("C", rep("I", n_f), rep("C", n_d * n_f))
+
+  # Reuse assignment constraints for y and x (offset columns by 1 for W)
+  A_assign <- .build_assignment_constraints(n_d, n_f)
+  # Extract triplets and shift columns by 1 to account for W in column 1
+  trip <- Matrix::summary(A_assign)
+  A_assign_shifted <- Matrix::sparseMatrix(
+    i = trip$i, j = trip$j + 1L, x = trip$x,
+    dims = c(nrow(A_assign), n_vars)
+  )
+
+  # Constraint 4: sum_j d[i,j]*x[i,j] - W <= 0 for each demand i (n_d rows)
+  # W coefficient: -1 in column 1
+  c4_w_i <- seq_len(n_d)
+  c4_w_j <- rep(1L, n_d)
+  c4_w_x <- rep(-1, n_d)
+
+  # d[i,j]*x[i,j] coefficients
+  x_offset <- 1L + n_f  # x variables start at column n_f+2
+  c4_x_i <- rep(seq_len(n_d), each = n_f)
+  c4_x_j <- x_offset + seq_len(n_d * n_f)
+  c4_x_x <- as.vector(t(cost_matrix))
+
+  A_minimax <- Matrix::sparseMatrix(
+    i = c(c4_w_i, c4_x_i),
+    j = c(c4_w_j, c4_x_j),
+    x = c(c4_w_x, c4_x_x),
+    dims = c(n_d, n_vars)
+  )
+
+  A <- rbind(A_assign_shifted, A_minimax)
+
+  n_assign_con <- nrow(A_assign)
+  lhs <- c(p, rep(1, n_d), rep(-Inf, n_d * n_f), rep(-Inf, n_d))
+  rhs <- c(p, rep(1, n_d), rep(0, n_d * n_f), rep(0, n_d))
+
+  res <- highs::highs_solve(
+    L = L, lower = lower, upper = upper,
+    A = A, lhs = lhs, rhs = rhs,
+    types = types, maximum = FALSE,
+    control = highs::highs_control(log_to_console = FALSE)
+  )
+
+  .check_highs_status(res, "P-Center (MIP)")
+
+  sol <- res$primal_solution
+  w_val <- sol[1]
+  selected <- which(sol[2:(n_f + 1)] > 0.5)
+
+  # Assignments from x variables
+  x_mat <- matrix(sol[(n_f + 2L):n_vars], nrow = n_d, ncol = n_f, byrow = TRUE)
+  assignments <- max.col(x_mat, ties.method = "first")
+
+  list(
+    selected = as.integer(selected),
+    assignments = as.integer(assignments),
+    n_selected = length(selected),
+    objective = w_val,
+    max_distance = w_val
+  )
+}
