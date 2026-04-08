@@ -152,13 +152,6 @@ rust_max_p <- function(attrs, threshold_var, threshold, adj_i, adj_j, n_iteratio
 #' @export
 rust_frlm_greedy <- function(n_candidates, path_candidates, path_offsets, path_distances, flow_volumes, vehicle_range, n_facilities) .Call(wrap__rust_frlm_greedy, n_candidates, path_candidates, path_offsets, path_distances, flow_volumes, vehicle_range, n_facilities)
 
-#' Solve Capacitated Facility Location Problem (CFLP)
-#'
-#' Minimize weighted distance subject to facility capacity constraints.
-#' Supports fixed number of facilities or facility opening costs.
-#'
-#' @param cost_matrix Cost/distance matrix (demand x facilities)
-#' @param weights Demand weights
 #' Compute Huff Model probabilities
 #'
 #' Computes probability surface based on distance decay and attractiveness.

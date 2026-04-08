@@ -319,13 +319,6 @@ fn rust_frlm_greedy(
     )
 }
 
-/// Solve Capacitated Facility Location Problem (CFLP)
-///
-/// Minimize weighted distance subject to facility capacity constraints.
-/// Supports fixed number of facilities or facility opening costs.
-///
-/// @param cost_matrix Cost/distance matrix (demand x facilities)
-/// @param weights Demand weights
 /// Compute Huff Model probabilities
 ///
 /// Computes probability surface based on distance decay and attractiveness.

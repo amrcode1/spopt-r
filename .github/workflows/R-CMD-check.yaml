@@ -41,20 +41,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Install libclang (Linux)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libclang-dev
-
-      - name: Install clang and cmake via Rtools MSYS2 (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          # Install toolchain pieces required by highs-sys / bindgen.
-          C:\rtools45\usr\bin\bash.exe -l -c "pacman -Sy --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-cmake"
-          # Set LIBCLANG_PATH for bindgen
-          echo "LIBCLANG_PATH=C:\rtools45\mingw64\bin" >> $env:GITHUB_ENV
-          # Also add the Rtools mingw bin dir to PATH so cargo can find clang and cmake.
-          echo "C:\rtools45\mingw64\bin" >> $env:GITHUB_PATH
-        shell: pwsh
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
