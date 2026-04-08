@@ -190,12 +190,11 @@ cflp <- function(demand,
 
   start_time <- Sys.time()
 
-  # Call Rust solver
-  result <- rust_cflp(
+  result <- .solve_cflp(
     cost_matrix,
     weights,
     capacities,
-    as.integer(n_facilities),
+    n_facilities,
     facility_costs
   )
 

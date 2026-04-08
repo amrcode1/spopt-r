@@ -467,3 +467,191 @@
     max_distance = w_val
   )
 }
+
+# ---------------------------------------------------------------------------
+# P-Dispersion: maximize minimum inter-facility distance.
+# ---------------------------------------------------------------------------
+.solve_p_dispersion <- function(distance_matrix, n_facilities) {
+  n <- nrow(distance_matrix)
+  p <- n_facilities
+  max_dist <- max(distance_matrix)
+  big_m <- max_dist + 1
+
+  # Variables: D (col 1, continuous), y[2..n+1] (binary)
+  n_vars <- 1L + n
+  n_pairs <- n * (n - 1L) / 2L
+
+  L <- c(1, rep(0, n))
+  lower <- c(0, rep(0, n))
+  upper <- c(max_dist, rep(1, n))
+  types <- c("C", rep("I", n))
+
+  # Constraints:
+  # 1: sum_i y[i] = p                              (1 row)
+  # 2: D + M*y[i] + M*y[j] <= d[i,j] + 2M         (n_pairs rows)
+  n_con <- 1L + n_pairs
+
+  # Constraint 1: facility count (vectorized)
+  c1_i <- rep(1L, n)
+  c1_j <- 1L + seq_len(n)
+  c1_x <- rep(1, n)
+
+  # Constraint 2: big-M constraints for all i < j (vectorized)
+  pairs <- which(upper.tri(distance_matrix), arr.ind = TRUE)  # rows: i, cols: j
+  pair_rows <- seq_len(nrow(pairs)) + 1L  # constraint rows 2..n_pairs+1
+
+  # D coefficient (+1)
+  c2a_i <- pair_rows
+  c2a_j <- rep(1L, nrow(pairs))
+  c2a_x <- rep(1, nrow(pairs))
+
+  # M*y[i] coefficient
+  c2b_i <- pair_rows
+  c2b_j <- 1L + pairs[, 1]  # y variable for facility i
+  c2b_x <- rep(big_m, nrow(pairs))
+
+  # M*y[j] coefficient
+  c2c_i <- pair_rows
+  c2c_j <- 1L + pairs[, 2]  # y variable for facility j
+  c2c_x <- rep(big_m, nrow(pairs))
+
+  A <- Matrix::sparseMatrix(
+    i = c(c1_i, c2a_i, c2b_i, c2c_i),
+    j = c(c1_j, c2a_j, c2b_j, c2c_j),
+    x = c(c1_x, c2a_x, c2b_x, c2c_x),
+    dims = c(n_con, n_vars)
+  )
+
+  # RHS: constraint 1 = p, constraint 2 = d[i,j] + 2*M
+  pair_rhs <- distance_matrix[pairs] + 2 * big_m
+  lhs <- c(p, rep(-Inf, n_pairs))
+  rhs <- c(p, pair_rhs)
+
+  res <- highs::highs_solve(
+    L = L, lower = lower, upper = upper,
+    A = A, lhs = lhs, rhs = rhs,
+    types = types, maximum = TRUE,
+    control = highs::highs_control(log_to_console = FALSE)
+  )
+
+  .check_highs_status(res, "P-Dispersion")
+
+  sol <- res$primal_solution
+  d_val <- sol[1]
+  selected <- which(sol[2:(n + 1)] > 0.5)
+
+  list(
+    selected = as.integer(selected),
+    n_selected = length(selected),
+    objective = d_val,
+    min_distance = d_val
+  )
+}
+
+# ---------------------------------------------------------------------------
+# CFLP: Capacitated Facility Location Problem.
+# Minimize transport + facility costs with capacity constraints.
+# ---------------------------------------------------------------------------
+.solve_cflp <- function(cost_matrix, weights, capacities, n_facilities,
+                        facility_costs) {
+  n_d <- nrow(cost_matrix)
+  n_f <- ncol(cost_matrix)
+
+  if (is.null(facility_costs)) facility_costs <- rep(0, n_f)
+
+  # Variable layout: y[1..n_f], x[n_f+1..n_f+n_d*n_f] (row-major)
+  n_vars <- n_f + n_d * n_f
+
+  # Objective: facility_costs[j]*y[j] + weights[i]*cost[i,j]*x[i,j]
+  L <- c(facility_costs, as.vector(t(cost_matrix * weights)))
+
+  lower <- rep(0, n_vars)
+  upper <- rep(1, n_vars)
+  types <- c(rep("I", n_f), rep("C", n_d * n_f))
+
+  # Build constraints using assignment helper, then append capacity rows
+  A_assign <- .build_assignment_constraints(n_d, n_f)
+  n_assign_con <- nrow(A_assign)
+
+  # If n_facilities == 0, remove the first row (facility count constraint)
+  if (n_facilities == 0L) {
+    A_assign <- A_assign[-1, , drop = FALSE]
+    n_assign_con <- nrow(A_assign)
+    assign_lhs <- c(rep(1, n_d), rep(-Inf, n_d * n_f))
+    assign_rhs <- c(rep(1, n_d), rep(0, n_d * n_f))
+  } else {
+    assign_lhs <- c(n_facilities, rep(1, n_d), rep(-Inf, n_d * n_f))
+    assign_rhs <- c(n_facilities, rep(1, n_d), rep(0, n_d * n_f))
+  }
+
+  # Capacity constraints: sum_i w[i]*x[i,j] - cap[j]*y[j] <= 0 for each j
+  # (n_f rows, each with n_d + 1 nonzeros)
+  cap_rows <- seq_len(n_f)
+
+  # -cap[j]*y[j] coefficient
+  cap_y_i <- cap_rows
+  cap_y_j <- seq_len(n_f)
+  cap_y_x <- -capacities
+
+  # w[i]*x[i,j] coefficients: for each facility j, n_d entries
+  # x[i,j] is at column n_f + (i-1)*n_f + j
+  cap_x_i <- rep(cap_rows, each = n_d)
+  cap_x_j <- as.vector(sapply(seq_len(n_f), function(j) n_f + (seq_len(n_d) - 1L) * n_f + j))
+  cap_x_x <- rep(weights, times = n_f)
+
+  A_cap <- Matrix::sparseMatrix(
+    i = c(cap_y_i, cap_x_i),
+    j = c(cap_y_j, cap_x_j),
+    x = c(cap_y_x, cap_x_x),
+    dims = c(n_f, n_vars)
+  )
+
+  A <- rbind(A_assign, A_cap)
+  lhs <- c(assign_lhs, rep(-Inf, n_f))
+  rhs <- c(assign_rhs, rep(0, n_f))
+
+  res <- highs::highs_solve(
+    L = L, lower = lower, upper = upper,
+    A = A, lhs = lhs, rhs = rhs,
+    types = types, maximum = FALSE,
+    control = highs::highs_control(log_to_console = FALSE)
+  )
+
+  .check_highs_status(res, "CFLP")
+
+  sol <- res$primal_solution
+  selected <- which(sol[seq_len(n_f)] > 0.5)
+
+  # Allocation matrix (n_d x n_f, row-major)
+  x_vec <- sol[(n_f + 1L):n_vars]
+  alloc_matrix <- matrix(x_vec, nrow = n_d, ncol = n_f, byrow = TRUE)
+
+  # Primary assignments
+  assignments <- max.col(alloc_matrix, ties.method = "first")
+
+  # Split demand: primary allocation < 0.999
+  primary_alloc <- alloc_matrix[cbind(seq_len(n_d), assignments)]
+  n_split <- sum(primary_alloc < 0.999)
+
+  # Utilizations: sum(w[i]*x[i,j]) / cap[j] for selected facilities
+  utilizations <- numeric(n_f)
+  for (j in selected) {
+    utilizations[j] <- sum(weights * alloc_matrix[, j]) / capacities[j]
+  }
+
+  # Mean weighted distance (from full allocation, not just primary)
+  total_weighted_dist <- sum(weights * rowSums(alloc_matrix * cost_matrix))
+  mean_distance <- total_weighted_dist / sum(weights)
+
+  list(
+    selected = as.integer(selected),
+    assignments = as.integer(assignments),
+    allocation_matrix = as.vector(t(alloc_matrix)),  # flattened row-major
+    n_selected = length(selected),
+    n_split_demand = as.integer(n_split),
+    objective = res$info$objective_function_value,
+    mean_distance = mean_distance,
+    utilizations = utilizations,
+    status = res$status_message
+  )
+}
