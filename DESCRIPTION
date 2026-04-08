@@ -13,8 +13,8 @@ Description: Spatial optimization algorithms for regionalization, facility
     P-Center, MCLP, LSCP, CFLP, P-Dispersion, FRLM), market share analysis
     (Huff model), and route / corridor optimization.
     Supports network-based travel times via custom cost matrices.
-    Uses a Rust backend via 'extendr' for performance and the 'HiGHS' solver
-    for mixed-integer programming.
+    Uses a Rust backend via 'extendr' for graph and routing algorithms,
+    and the 'HiGHS' solver via the 'highs' package for facility location.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -22,7 +22,8 @@ RoxygenNote: 7.3.3
 Imports:
     sf,
     spdep,
-    Matrix
+    Matrix,
+    highs
 Suggests:
     testthat (>= 3.0.0),
     terra,
@@ -37,7 +38,7 @@ Suggests:
 VignetteBuilder: quarto
 Config/testthat/edition: 3
 Config/rextendr/version: 0.4.2.9000
-SystemRequirements: Cargo (Rust's package manager), rustc >= 1.70, cmake, libclang-dev
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.70
 URL: https://walker-data.com/spopt-r, https://github.com/walkerke/spopt-r
 BugReports: https://github.com/walkerke/spopt-r/issues
 Depends:

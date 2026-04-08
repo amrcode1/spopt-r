@@ -1,11 +1,12 @@
 # spopt
 
 The **spopt** R package provides R-native implementations of spatial
-optimization algorithms for regionalization, facility location, and
-market analysis. Inspired by [Python’s PySAL
-spopt](https://pysal.org/spopt/), the package brings these powerful
-algorithms to R users with an sf-first API and a Rust backend for
-performance.
+optimization algorithms for regionalization, facility location, route
+optimization, and corridor routing. Inspired by [Python’s PySAL
+spopt](https://pysal.org/spopt/), the package brings these algorithms to
+R users with an sf-first API, a Rust backend for graph and routing
+algorithms, and the [HiGHS](https://cran.r-project.org/package=highs)
+solver for facility location.
 
 Install from r-universe:
 

@@ -137,7 +137,7 @@ p_median <- function(demand,
 
   start_time <- Sys.time()
 
-  result <- rust_p_median(cost_matrix, weights, as.integer(n_facilities), fixed_facilities)
+  result <- .solve_p_median(cost_matrix, weights, n_facilities, fixed_facilities)
 
   end_time <- Sys.time()
 

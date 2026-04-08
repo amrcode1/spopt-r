@@ -138,8 +138,7 @@ p_center <- function(demand,
 
   start_time <- Sys.time()
 
-  # Call Rust solver with specified method
-  result <- rust_p_center(cost_matrix, as.integer(n_facilities), method, fixed_facilities)
+  result <- .solve_p_center(cost_matrix, n_facilities, method, fixed_facilities)
 
   end_time <- Sys.time()
 

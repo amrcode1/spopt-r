@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Spatial optimization algorithms for regionalization, facility location, and market analysis. Includes algorithms for spatial clustering (Max-P, AZP, SKATER, SPENC, Ward), optimal facility siting (P-Median, P-Center, MCLP, LSCP, CFLP, P-Dispersion, FRLM), market share analysis (Huff model), and route / corridor optimization. Supports network-based travel times via custom cost matrices. Uses a Rust backend via 'extendr' for performance and the 'HiGHS' solver for mixed-integer programming.
+Spatial optimization algorithms for regionalization, facility location, and market analysis. Includes algorithms for spatial clustering (Max-P, AZP, SKATER, SPENC, Ward), optimal facility siting (P-Median, P-Center, MCLP, LSCP, CFLP, P-Dispersion, FRLM), market share analysis (Huff model), and route / corridor optimization. Supports network-based travel times via custom cost matrices. Uses a Rust backend via 'extendr' for graph and routing algorithms, and the 'HiGHS' solver via the 'highs' package for facility location.
 }
 \seealso{
 Useful links:

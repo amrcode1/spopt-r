@@ -92,8 +92,7 @@ p_dispersion <- function(facilities,
 
   start_time <- Sys.time()
 
-  # Call Rust MIP solver
-  result <- rust_p_dispersion(cost_matrix, as.integer(n_facilities))
+  result <- .solve_p_dispersion(cost_matrix, n_facilities)
 
   end_time <- Sys.time()
 
