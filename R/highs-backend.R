@@ -10,8 +10,12 @@
 # ---------------------------------------------------------------------------
 # Status check: stop with informative error if solver did not find optimal
 # ---------------------------------------------------------------------------
+.highs_is_optimal <- function(res) {
+  res$status_message == "Optimal"
+}
+
 .check_highs_status <- function(res, solver_name) {
-  if (res$status_message != "Optimal") {
+  if (!.highs_is_optimal(res)) {
     stop(sprintf("%s solver returned non-optimal status: %s", solver_name,
                  res$status_message), call. = FALSE)
   }
@@ -377,7 +381,7 @@
     control = highs::highs_control(log_to_console = FALSE)
   )
 
-  if (res$status_message != "Optimal") return(NULL)
+  if (!.highs_is_optimal(res)) return(NULL)
 
   selected <- which(res$primal_solution > 0.5)
   if (length(selected) == p) selected else NULL

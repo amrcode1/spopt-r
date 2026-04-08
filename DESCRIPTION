@@ -22,7 +22,8 @@ RoxygenNote: 7.3.3
 Imports:
     sf,
     spdep,
-    Matrix
+    Matrix,
+    highs
 Suggests:
     testthat (>= 3.0.0),
     terra,
