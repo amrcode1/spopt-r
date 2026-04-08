@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{rust_huff}
 \alias{rust_huff}
-\title{Compute Huff Model probabilities}
+\title{Solve Capacitated Facility Location Problem (CFLP)}
 \usage{
 rust_huff(cost_matrix, attractiveness, distance_exponent, sales_potential)
 }
@@ -14,11 +14,17 @@ rust_huff(cost_matrix, attractiveness, distance_exponent, sales_potential)
 \item{distance_exponent}{Distance decay exponent (typically negative, e.g., -1.5)}
 
 \item{sales_potential}{Optional sales potential for each demand point}
+
+\item{weights}{Demand weights
+Compute Huff Model probabilities
+
+Computes probability surface based on distance decay and attractiveness.
+Formula: P_ij = (A_j × D_ij^β) / Σ_k(A_k × D_ik^β)}
 }
 \value{
 List with probabilities, market shares, expected sales
 }
 \description{
-Computes probability surface based on distance decay and attractiveness.
-Formula: P_ij = (A_j × D_ij^β) / Σ_k(A_k × D_ik^β)
+Minimize weighted distance subject to facility capacity constraints.
+Supports fixed number of facilities or facility opening costs.
 }

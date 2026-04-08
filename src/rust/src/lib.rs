@@ -111,137 +111,6 @@ fn rust_skater(
     )
 }
 
-/// Parse and validate fixed_facilities from R (1-based) to Rust (0-based)
-fn parse_fixed_facilities(
-    fixed: Nullable<Vec<i32>>,
-    n_candidates: usize,
-    requested_p: usize,
-) -> Vec<usize> {
-    let raw = match fixed.into_option() {
-        None => return Vec::new(),
-        Some(v) => v,
-    };
-    if raw.is_empty() {
-        return Vec::new();
-    }
-    // Validate range (1-based from R)
-    for &idx in &raw {
-        if idx < 1 || idx as usize > n_candidates {
-            extendr_api::throw_r_error(format!(
-                "fixed_facilities index {} is out of range [1, {}]",
-                idx, n_candidates
-            ));
-        }
-    }
-    // Check duplicates
-    let mut seen = std::collections::HashSet::new();
-    for &idx in &raw {
-        if !seen.insert(idx) {
-            extendr_api::throw_r_error(format!(
-                "fixed_facilities contains duplicate index {}",
-                idx
-            ));
-        }
-    }
-    // Check count
-    if raw.len() > requested_p {
-        extendr_api::throw_r_error(format!(
-            "fixed_facilities has {} entries but only {} facilities requested",
-            raw.len(), requested_p
-        ));
-    }
-    // Convert to 0-based
-    raw.iter().map(|&idx| (idx - 1) as usize).collect()
-}
-
-/// Solve P-Median facility location problem
-///
-/// @param cost_matrix Cost/distance matrix (demand x facilities)
-/// @param weights Demand weights
-/// @param n_facilities Number of facilities to locate (p)
-/// @param fixed_facilities Optional indices of pre-selected facilities (1-based)
-/// @return List with selected facilities and assignments
-/// @export
-#[extendr]
-fn rust_p_median(
-    cost_matrix: RMatrix<f64>,
-    weights: Vec<f64>,
-    n_facilities: i32,
-    fixed_facilities: Nullable<Vec<i32>>,
-) -> List {
-    let n_fac = cost_matrix.ncols();
-    let p = n_facilities as usize;
-    let fixed = parse_fixed_facilities(fixed_facilities, n_fac, p);
-    locate::p_median::solve(cost_matrix, &weights, p, &fixed)
-}
-
-/// Solve LSCP (Location Set Covering Problem)
-///
-/// @param cost_matrix Cost/distance matrix (demand x facilities)
-/// @param service_radius Maximum service distance
-/// @return List with selected facilities and coverage
-/// @export
-#[extendr]
-fn rust_lscp(cost_matrix: RMatrix<f64>, service_radius: f64) -> List {
-    locate::coverage::solve_lscp(cost_matrix, service_radius)
-}
-
-/// Solve MCLP (Maximum Coverage Location Problem)
-///
-/// @param cost_matrix Cost/distance matrix (demand x facilities)
-/// @param weights Demand weights
-/// @param service_radius Maximum service distance
-/// @param n_facilities Number of facilities to locate
-/// @return List with selected facilities and coverage
-/// @noRd
-#[extendr]
-fn rust_mclp(
-    cost_matrix: RMatrix<f64>,
-    weights: Vec<f64>,
-    service_radius: f64,
-    n_facilities: i32,
-    fixed_facilities: Nullable<Vec<i32>>,
-) -> List {
-    let n_fac = cost_matrix.ncols();
-    let p = n_facilities as usize;
-    let fixed = parse_fixed_facilities(fixed_facilities, n_fac, p);
-    locate::coverage::solve_mclp(cost_matrix, &weights, service_radius, p, &fixed)
-}
-
-/// Solve P-Center facility location problem
-///
-/// @param cost_matrix Cost/distance matrix (demand x facilities)
-/// @param n_facilities Number of facilities to locate
-/// @param method Algorithm method: "binary_search" (default) or "mip"
-/// @return List with selected facilities, assignments, and max distance
-/// @noRd
-#[extendr]
-fn rust_p_center(
-    cost_matrix: RMatrix<f64>,
-    n_facilities: i32,
-    method: &str,
-    fixed_facilities: Nullable<Vec<i32>>,
-) -> List {
-    let n_fac = cost_matrix.ncols();
-    let p = n_facilities as usize;
-    let fixed = parse_fixed_facilities(fixed_facilities, n_fac, p);
-    locate::p_center::solve(cost_matrix, p, method, &fixed)
-}
-
-/// Solve P-Dispersion facility location problem
-///
-/// @param distance_matrix Distance matrix between facilities
-/// @param n_facilities Number of facilities to select
-/// @return List with selected facilities and min distance
-/// @export
-#[extendr]
-fn rust_p_dispersion(
-    distance_matrix: RMatrix<f64>,
-    n_facilities: i32,
-) -> List {
-    locate::p_dispersion::solve(distance_matrix, n_facilities as usize)
-}
-
 /// Solve spatially-constrained Ward clustering
 ///
 /// @param attrs Attribute matrix (n x p)
@@ -457,28 +326,6 @@ fn rust_frlm_greedy(
 ///
 /// @param cost_matrix Cost/distance matrix (demand x facilities)
 /// @param weights Demand weights
-/// @param capacities Capacity of each facility
-/// @param n_facilities Number of facilities to locate (0 if using facility costs)
-/// @param facility_costs Optional fixed cost to open each facility
-/// @return List with selected facilities, assignments, utilizations
-/// @export
-#[extendr]
-fn rust_cflp(
-    cost_matrix: RMatrix<f64>,
-    weights: Vec<f64>,
-    capacities: Vec<f64>,
-    n_facilities: i32,
-    facility_costs: Nullable<Vec<f64>>,
-) -> List {
-    locate::cflp::solve(
-        cost_matrix,
-        &weights,
-        &capacities,
-        n_facilities as usize,
-        facility_costs.into_option().as_deref(),
-    )
-}
-
 /// Compute Huff Model probabilities
 ///
 /// Computes probability surface based on distance decay and attractiveness.
@@ -1004,13 +851,7 @@ extendr_module! {
     fn rust_spenc;
     fn rust_ward_constrained;
     fn rust_max_p;
-    fn rust_p_median;
-    fn rust_lscp;
-    fn rust_mclp;
-    fn rust_p_center;
-    fn rust_p_dispersion;
     fn rust_frlm_greedy;
-    fn rust_cflp;
     fn rust_huff;
     fn rust_tsp;
     fn rust_vrp;

@@ -139,51 +139,6 @@ rust_ward_constrained <- function(attrs, n_regions, adj_i, adj_j) .Call(wrap__ru
 #' @noRd
 rust_max_p <- function(attrs, threshold_var, threshold, adj_i, adj_j, n_iterations, n_sa_iterations, cooling_rate, tabu_length, seed, homogeneous, compact, compact_weight, compact_metric, centroids_x, centroids_y, areas, moments) .Call(wrap__rust_max_p, attrs, threshold_var, threshold, adj_i, adj_j, n_iterations, n_sa_iterations, cooling_rate, tabu_length, seed, homogeneous, compact, compact_weight, compact_metric, centroids_x, centroids_y, areas, moments)
 
-#' Solve P-Median facility location problem
-#'
-#' @param cost_matrix Cost/distance matrix (demand x facilities)
-#' @param weights Demand weights
-#' @param n_facilities Number of facilities to locate (p)
-#' @param fixed_facilities Optional indices of pre-selected facilities (1-based)
-#' @return List with selected facilities and assignments
-#' @export
-rust_p_median <- function(cost_matrix, weights, n_facilities, fixed_facilities) .Call(wrap__rust_p_median, cost_matrix, weights, n_facilities, fixed_facilities)
-
-#' Solve LSCP (Location Set Covering Problem)
-#'
-#' @param cost_matrix Cost/distance matrix (demand x facilities)
-#' @param service_radius Maximum service distance
-#' @return List with selected facilities and coverage
-#' @export
-rust_lscp <- function(cost_matrix, service_radius) .Call(wrap__rust_lscp, cost_matrix, service_radius)
-
-#' Solve MCLP (Maximum Coverage Location Problem)
-#'
-#' @param cost_matrix Cost/distance matrix (demand x facilities)
-#' @param weights Demand weights
-#' @param service_radius Maximum service distance
-#' @param n_facilities Number of facilities to locate
-#' @return List with selected facilities and coverage
-#' @noRd
-rust_mclp <- function(cost_matrix, weights, service_radius, n_facilities, fixed_facilities) .Call(wrap__rust_mclp, cost_matrix, weights, service_radius, n_facilities, fixed_facilities)
-
-#' Solve P-Center facility location problem
-#'
-#' @param cost_matrix Cost/distance matrix (demand x facilities)
-#' @param n_facilities Number of facilities to locate
-#' @param method Algorithm method: "binary_search" (default) or "mip"
-#' @return List with selected facilities, assignments, and max distance
-#' @noRd
-rust_p_center <- function(cost_matrix, n_facilities, method, fixed_facilities) .Call(wrap__rust_p_center, cost_matrix, n_facilities, method, fixed_facilities)
-
-#' Solve P-Dispersion facility location problem
-#'
-#' @param distance_matrix Distance matrix between facilities
-#' @param n_facilities Number of facilities to select
-#' @return List with selected facilities and min distance
-#' @export
-rust_p_dispersion <- function(distance_matrix, n_facilities) .Call(wrap__rust_p_dispersion, distance_matrix, n_facilities)
-
 #' Solve FRLM using greedy heuristic
 #'
 #' @param n_candidates Number of candidate facility locations
@@ -204,13 +159,6 @@ rust_frlm_greedy <- function(n_candidates, path_candidates, path_offsets, path_d
 #'
 #' @param cost_matrix Cost/distance matrix (demand x facilities)
 #' @param weights Demand weights
-#' @param capacities Capacity of each facility
-#' @param n_facilities Number of facilities to locate (0 if using facility costs)
-#' @param facility_costs Optional fixed cost to open each facility
-#' @return List with selected facilities, assignments, utilizations
-#' @export
-rust_cflp <- function(cost_matrix, weights, capacities, n_facilities, facility_costs) .Call(wrap__rust_cflp, cost_matrix, weights, capacities, n_facilities, facility_costs)
-
 #' Compute Huff Model probabilities
 #'
 #' Computes probability surface based on distance decay and attractiveness.
