@@ -8,6 +8,16 @@
 # p-center, cflp) uses shared index-generation helpers.
 
 # ---------------------------------------------------------------------------
+# Status check: stop with informative error if solver did not find optimal
+# ---------------------------------------------------------------------------
+.check_highs_status <- function(res, solver_name) {
+  if (res$status_message != "Optimal") {
+    stop(sprintf("%s solver returned non-optimal status: %s", solver_name,
+                 res$status_message), call. = FALSE)
+  }
+}
+
+# ---------------------------------------------------------------------------
 # LSCP: Location Set Covering Problem
 # Minimize number of facilities to cover all demand within service_radius.
 # ---------------------------------------------------------------------------
@@ -44,6 +54,8 @@
     types = types, maximum = FALSE,
     control = highs::highs_control(log_to_console = FALSE)
   )
+
+  .check_highs_status(res, "LSCP")
 
   sol <- res$primal_solution
   selected <- which(sol > 0.5)
@@ -88,7 +100,7 @@
   types <- c(rep("I", n_f), rep("C", n_d * n_f))
 
   # Sparse constraint matrix (fully vectorized triplet construction)
-  A <- .build_assignment_constraints(n_d, n_f, p)
+  A <- .build_assignment_constraints(n_d, n_f)
 
   lhs <- c(p, rep(1, n_d), rep(-Inf, n_d * n_f))
   rhs <- c(p, rep(1, n_d), rep(0, n_d * n_f))
@@ -99,6 +111,8 @@
     types = types, maximum = FALSE,
     control = highs::highs_control(log_to_console = FALSE)
   )
+
+  .check_highs_status(res, "P-Median")
 
   sol <- res$primal_solution
   selected <- which(sol[seq_len(n_f)] > 0.5)
@@ -131,7 +145,7 @@
 #
 # Returns a sparse Matrix of dimensions (1 + n_d + n_d*n_f) x (n_f + n_d*n_f)
 # ---------------------------------------------------------------------------
-.build_assignment_constraints <- function(n_d, n_f, p) {
+.build_assignment_constraints <- function(n_d, n_f) {
   n_vars <- n_f + n_d * n_f
   n_con <- 1L + n_d + n_d * n_f
 
