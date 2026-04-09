@@ -13,7 +13,7 @@ Spatial optimization algorithms for regionalization, facility location, and mark
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://walker-data.com/spopt-r}
+  \item \url{https://walker-data.com/spopt-r/}
   \item \url{https://github.com/walkerke/spopt-r}
   \item Report bugs at \url{https://github.com/walkerke/spopt-r/issues}
 }

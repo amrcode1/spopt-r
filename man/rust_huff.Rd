@@ -20,5 +20,5 @@ List with probabilities, market shares, expected sales
 }
 \description{
 Computes probability surface based on distance decay and attractiveness.
-Formula: P_ij = (A_j × D_ij^β) / Σ_k(A_k × D_ik^β)
+Formula: \eqn{P_{ij} = (A_j \times D_{ij}^\beta) / \Sigma_k(A_k \times D_{ik}^\beta)}
 }

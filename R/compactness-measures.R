@@ -37,11 +37,11 @@
 #' Li, W., Goodchild, M.F., and Church, R.L. 2013. 
 #' "An Efficient Measure of Compactness for Two-Dimensional Shapes and Its Application in Regionalization Problems." 
 #' International Journal of Geographical Information Science 27 (6): 1227–50. 
-#' \url{doi:10.1080/13658816.2012.752093}.
+#' \doi{10.1080/13658816.2012.752093}.
 #'
 #' Rey, Sergio J., and Luc Anselin. 2007. "PySAL: A Python Library of Spatial Analytical Methods."
-#' Review of Regional Studies 37 (1): 5–27. 
-#' \url{https:/​/​doi.org/​10.52324/​001c.8285}.
+#' Review of Regional Studies 37 (1): 5–27.
+#' \doi{10.52324/001c.8285}.
 #'
 #' @export
 #' @seealso [nmi()], which computes the normalized moment of inertia.
@@ -210,17 +210,17 @@ second_areal_moment <- function(x, project = TRUE) {
 #' @export
 #' @references 
 #' 
-#' Feng, X., Rey, S., and Wei, R. (2022). "The max-p-compact-regions problem." 
-#' Transactions in GIS, 26, 717–734. \url{https://doi.org/10.1111/tgis.12874}.
-#' 
-#' Li, W., Goodchild, M.F., and Church, R.L. 2013. 
-#' "An Efficient Measure of Compactness for Two-Dimensional Shapes and Its Application in Regionalization Problems." 
-#' International Journal of Geographical Information Science 27 (6): 1227–50. 
-#' \url{doi:10.1080/13658816.2012.752093}.
-#' 
-#' Li, W., Church, R.L. and Goodchild, M.F. 2014. 
-#' "The p-Compact-regions Problem." Geogr Anal, 46: 250-273. 
-#' \url{https://doi.org/10.1111/gean.12038}.
+#' Feng, X., Rey, S., and Wei, R. (2022). "The max-p-compact-regions problem."
+#' Transactions in GIS, 26, 717–734. \doi{10.1111/tgis.12874}.
+#'
+#' Li, W., Goodchild, M.F., and Church, R.L. 2013.
+#' "An Efficient Measure of Compactness for Two-Dimensional Shapes and Its Application in Regionalization Problems."
+#' International Journal of Geographical Information Science 27 (6): 1227–50.
+#' \doi{10.1080/13658816.2012.752093}.
+#'
+#' Li, W., Church, R.L. and Goodchild, M.F. 2014.
+#' "The p-Compact-regions Problem." Geogr Anal, 46: 250-273.
+#' \doi{10.1111/gean.12038}.
 #' @seealso [second_areal_moment()]
 nmi <- function(x) {
   if (inherits(x, "sf")) {

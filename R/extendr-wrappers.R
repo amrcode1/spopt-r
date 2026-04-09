@@ -155,7 +155,7 @@ rust_frlm_greedy <- function(n_candidates, path_candidates, path_offsets, path_d
 #' Compute Huff Model probabilities
 #'
 #' Computes probability surface based on distance decay and attractiveness.
-#' Formula: P_ij = (A_j × D_ij^β) / Σ_k(A_k × D_ik^β)
+#' Formula: \eqn{P_{ij} = (A_j \times D_{ij}^\beta) / \Sigma_k(A_k \times D_{ik}^\beta)}
 #'
 #' @param cost_matrix Cost/distance matrix (demand x stores)
 #' @param attractiveness Attractiveness values for each store (pre-computed with exponents)

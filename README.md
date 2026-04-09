@@ -1,4 +1,4 @@
-# spopt <a href="https://walker-data.com/spopt/"><img src="man/figures/logo.png" align="right" height="120" alt="spopt website" /></a>
+# spopt <a href="https://walker-data.com/spopt-r/"><img src="man/figures/logo.png" align="right" height="120" alt="spopt website" /></a>
 
 The **spopt** R package provides R-native implementations of spatial optimization algorithms for regionalization, facility location, route optimization, and corridor routing. Inspired by [Python's PySAL spopt](https://pysal.org/spopt/), the package brings these algorithms to R users with an sf-first API, a Rust backend for graph and routing algorithms, and the [HiGHS](https://cran.r-project.org/package=highs) solver for facility location.
 
@@ -8,7 +8,7 @@ Install from r-universe:
 install.packages('spopt', repos = c('https://walkerke.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
-For developers who need to build from source (requires Rust), see [CONTRIBUTING.md](CONTRIBUTING.md).
+For developers who need to build from source (requires Rust), see [CONTRIBUTING.md](https://github.com/walkerke/spopt-r/blob/main/CONTRIBUTING.md).
 
 Read through these vignettes to learn how to use the package:
 

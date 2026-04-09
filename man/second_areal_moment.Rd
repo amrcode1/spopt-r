@@ -53,11 +53,11 @@ Defense Research and Development Technical Memorandum 87/209.
 Li, W., Goodchild, M.F., and Church, R.L. 2013.
 "An Efficient Measure of Compactness for Two-Dimensional Shapes and Its Application in Regionalization Problems."
 International Journal of Geographical Information Science 27 (6): 1227–50.
-\url{doi:10.1080/13658816.2012.752093}.
+\doi{10.1080/13658816.2012.752093}.
 
 Rey, Sergio J., and Luc Anselin. 2007. "PySAL: A Python Library of Spatial Analytical Methods."
 Review of Regional Studies 37 (1): 5–27.
-\url{https:/​/​doi.org/​10.52324/​001c.8285}.
+\doi{10.52324/001c.8285}.
 }
 \seealso{
 \code{\link[=nmi]{nmi()}}, which computes the normalized moment of inertia.
