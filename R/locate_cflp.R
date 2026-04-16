@@ -53,7 +53,7 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #'
 #' # Demand points with population

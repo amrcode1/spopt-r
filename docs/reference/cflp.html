@@ -152,7 +152,7 @@ European Journal of Operational Research, 87(2), 203-213.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Demand points with population</span></span></span>
@@ -173,13 +173,25 @@ European Journal of Operational Research, 87(2), 203-213.
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check utilization</span></span></span>
 <span class="r-in"><span><span class="va">result</span><span class="op">$</span><span class="va">facilities</span><span class="op">[</span><span class="va">result</span><span class="op">$</span><span class="va">facilities</span><span class="op">$</span><span class="va">.selected</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"capacity"</span>, <span class="st">".utilization"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 5 features and 2 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0.01087246 ymin: 0.1990008 xmax: 0.7607611 ymax: 0.8756219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    capacity .utilization                     geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      5000       1.0000  POINT (0.6332316 0.7502479)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     10000       1.0000  POINT (0.7607611 0.5438312)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     10000       0.7847 POINT (0.01087246 0.1990008)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10000       1.0000  POINT (0.5938366 0.2709778)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    20000       0.8475    POINT (0.29756 0.8756219)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Cost-based (optimal number of facilities)</span></span></span>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">cflp</span><span class="op">(</span><span class="va">demand</span>, <span class="va">facilities</span>, n_facilities <span class="op">=</span> <span class="fl">0</span>,</span></span>
 <span class="r-in"><span>               weight_col <span class="op">=</span> <span class="st">"population"</span>, capacity_col <span class="op">=</span> <span class="st">"capacity"</span>,</span></span>
 <span class="r-in"><span>               facility_cost_col <span class="op">=</span> <span class="st">"fixed_cost"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">result</span>, <span class="st">"spopt"</span><span class="op">)</span><span class="op">$</span><span class="va">n_selected</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

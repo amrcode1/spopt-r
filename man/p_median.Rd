@@ -85,7 +85,7 @@ consider \code{\link[=p_center]{p_center()}} instead.
 }
 
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 
 demand <- st_as_sf(data.frame(

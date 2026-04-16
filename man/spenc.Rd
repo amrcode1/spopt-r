@@ -87,7 +87,7 @@ The gamma parameter controls how quickly attribute similarity decays with
 distance in attribute space. Larger values create more localized clusters.
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
 

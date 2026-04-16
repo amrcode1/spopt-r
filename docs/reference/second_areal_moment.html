@@ -99,10 +99,12 @@ Defense Research and Development Technical Memorandum 87/209.
 <p>Li, W., Goodchild, M.F., and Church, R.L. 2013.
 "An Efficient Measure of Compactness for Two-Dimensional Shapes and Its Application in Regionalization Problems."
 International Journal of Geographical Information Science 27 (6): 1227–50.
-<a href="doi:10.1080/13658816.2012.752093">doi:10.1080/13658816.2012.752093</a>.</p>
+<a href="https://doi.org/10.1080/13658816.2012.752093" class="external-link">doi:10.1080/13658816.2012.752093</a>
+.</p>
 <p>Rey, Sergio J., and Luc Anselin. 2007. "PySAL: A Python Library of Spatial Analytical Methods."
 Review of Regional Studies 37 (1): 5–27.
-<a href="https:/%E2%80%8B/%E2%80%8Bdoi.org/%E2%80%8B10.52324/%E2%80%8B001c.8285">https:/​/​doi.org/​10.52324/​001c.8285</a>.</p>
+<a href="https://doi.org/10.52324/001c.8285" class="external-link">doi:10.52324/001c.8285</a>
+.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -112,7 +114,6 @@ Review of Regional Studies 37 (1): 5–27.
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE</span>
 <span class="r-in"><span><span class="va">poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>, <span class="fl">1</span>,<span class="fl">0</span>, <span class="fl">1</span>,<span class="fl">1</span>, <span class="fl">0</span>,<span class="fl">1</span>, <span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, ncol<span class="op">=</span><span class="fl">2</span>, byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">second_areal_moment</span><span class="op">(</span><span class="va">poly</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1666667</span>

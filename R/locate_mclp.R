@@ -60,7 +60,7 @@
 #' the minimum number of facilities needed.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #'
 #' # Create demand with weights

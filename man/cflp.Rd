@@ -80,7 +80,7 @@ let the solver determine the optimal number based on fixed + variable costs
 }
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 
 # Demand points with population

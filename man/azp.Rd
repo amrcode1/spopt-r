@@ -98,7 +98,7 @@ probability as temperature cools
 }
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
 

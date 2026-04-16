@@ -58,7 +58,7 @@
 #' consider [p_center()] instead.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #'
 #' demand <- st_as_sf(data.frame(

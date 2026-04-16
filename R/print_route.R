@@ -104,15 +104,76 @@ summary.spopt_vrp <- function(object, ...) {
 #' @export
 print.spopt_corridor <- function(x, ...) {
   meta <- attr(x, "spopt")
-  cat("Least-cost corridor\n")
+  n_wp <- meta$n_waypoints_input
+  has_wp <- !is.null(n_wp) && n_wp > 0L
+
+  header <- if (has_wp) "Least-cost corridor (via waypoints)" else "Least-cost corridor"
+  cat(header, "\n", sep = "")
   cat("  Method:", meta$method, "\n")
   cat("  Total cost:", round(meta$total_cost, 2), "\n")
   cat("  Path distance:", round(x$path_dist, 0), "\n")
   cat("  Cells traversed:", meta$n_cells, "\n")
   cat("  Sinuosity:", round(x$sinuosity, 3), "\n")
+  if (has_wp && !is.null(x$leg_sinuosity)) {
+    cat("  Leg sinuosity:", round(x$leg_sinuosity, 3), "\n")
+  }
   cat("  Solve time:", round(meta$solve_time, 3), "s\n")
+
+  if (has_wp) {
+    n_eff <- meta$n_waypoints_effective %||% n_wp
+    if (!is.null(n_eff) && n_eff != n_wp) {
+      cat(sprintf("  Waypoints: %d supplied, %d effective (duplicates/same-cell elided)\n",
+                  n_wp, n_eff))
+    } else {
+      cat(sprintf("  Waypoints: %d\n", n_wp))
+    }
+    seg_costs <- meta$segment_costs
+    seg_dists <- meta$segment_path_dists
+    if (length(seg_costs) > 0L) {
+      cat(sprintf("  %-10s  %12s  %12s\n", "Segment", "Cost", "Distance"))
+      for (i in seq_along(seg_costs)) {
+        cat(sprintf("  %-10s  %12s  %12.0f\n",
+                    sprintf("%d", i),
+                    format(round(seg_costs[i], 0), big.mark = ","),
+                    seg_dists[i]))
+      }
+    }
+  }
+
   invisible(x)
 }
+
+#' @export
+print.spopt_corridor_segments <- function(x, ...) {
+  meta <- attr(x, "spopt")
+  cat("Least-cost corridor: per-segment output\n")
+  cat("  Method:", meta$method, "\n")
+  cat(sprintf("  Segments: %d (waypoints: %d supplied, %d effective)\n",
+              meta$n_segments_effective,
+              meta$n_waypoints_input,
+              meta$n_waypoints_effective))
+  cat("  Total cost:", round(meta$total_cost, 2), "\n")
+  cat("  Solve time:", round(meta$solve_time, 3), "s",
+      sprintf("(graph build: %.3fs)\n", meta$graph_build_time))
+
+  cat(sprintf("\n  %-4s  %-14s  %-14s  %12s  %12s  %9s\n",
+              "#", "From", "To", "Cost", "Distance", "Sinuosity"))
+  for (i in seq_len(nrow(x))) {
+    row <- x[i, , drop = FALSE]
+    sinu_str <- if (is.na(row$sinuosity)) "-" else sprintf("%.3f", row$sinuosity)
+    cat(sprintf("  %-4d  %-14s  %-14s  %12s  %12.0f  %9s\n",
+                row$segment,
+                substr(row$from_label, 1, 14),
+                substr(row$to_label, 1, 14),
+                format(round(row$total_cost, 0), big.mark = ","),
+                row$path_dist,
+                sinu_str))
+  }
+  invisible(x)
+}
+
+# Null-coalescing helper (local utility for print method)
+`%||%` <- function(a, b) if (is.null(a)) b else a
 
 #' @export
 print.spopt_corridor_graph <- function(x, ...) {

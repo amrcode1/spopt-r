@@ -164,7 +164,7 @@ This implementation is optimized for speed using:
 }
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
 

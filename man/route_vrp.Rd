@@ -119,7 +119,7 @@ of technicians or crews
 }
 
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 
 # Depot + 20 customers with demands

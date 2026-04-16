@@ -49,7 +49,7 @@
 #' within budget constraints, consider [mclp()] instead.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #'
 #' # Create demand and facility points

@@ -165,7 +165,7 @@ Marketing, 28(3), 34-38. <a href="https://doi.org/10.1177/002224296402800307" cl
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create demand grid with spending potential</span></span></span>
@@ -196,6 +196,15 @@ Marketing, 28(3), 34-38. <a href="https://doi.org/10.1177/002224296402800307" cl
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># View market shares</span></span></span>
 <span class="r-in"><span><span class="va">result_multi</span><span class="op">$</span><span class="va">stores</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"sqft"</span>, <span class="st">"parking"</span>, <span class="st">".market_share"</span>, <span class="st">".expected_sales"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 3 features and 5 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 2 ymin: 2 xmax: 8 ymax: 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id  sqft parking .market_share .expected_sales    geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Store_A 50000     200     0.2403236        70545.24 POINT (2 2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Store_B 25000     100     0.1722739        50569.74 POINT (8 8)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Store_C 75000     300     0.5874025       172427.74 POINT (5 5)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Evaluate a new candidate store</span></span></span>
 <span class="r-in"><span><span class="va">candidate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -211,7 +220,17 @@ Marketing, 28(3), 34-38. <a href="https://doi.org/10.1177/002224296402800307" cl
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Compare market shares with and without candidate</span></span></span>
 <span class="r-in"><span><span class="va">result_with_candidate</span><span class="op">$</span><span class="va">stores</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">".market_share"</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 4 features and 2 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 2 ymin: 2 xmax: 8 ymax: 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          id .market_share    geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   Store_A     0.1986106 POINT (2 2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   Store_B     0.1430980 POINT (8 8)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   Store_C     0.4351902 POINT (5 5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 New_Store     0.2231012 POINT (3 7)</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

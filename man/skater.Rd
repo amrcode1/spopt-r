@@ -61,7 +61,7 @@ tree from the spatial contiguity graph, then iteratively removes edges
 to create spatially contiguous clusters.
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
 

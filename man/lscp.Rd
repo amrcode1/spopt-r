@@ -72,7 +72,7 @@ within budget constraints, consider \code{\link[=mclp]{mclp()}} instead.
 }
 
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 
 # Create demand and facility points

@@ -6,6 +6,9 @@
 #' @param x An \code{spopt_k_corridors} object from \code{\link{route_k_corridors}}.
 #' @param ... Additional arguments passed to the initial \code{plot()} call.
 #'
+#' @return No return value, called for side effects (draws the corridors to
+#'   the active graphics device).
+#'
 #' @export
 plot.spopt_k_corridors <- function(x, ...) {
   k <- nrow(x)

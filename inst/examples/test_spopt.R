@@ -295,7 +295,8 @@ if (requireNamespace("tidycensus", quietly = TRUE)) {
   library(tidycensus)
 
   cat("Fetching TX tracts from Census API...\n")
-  options(tigris_use_cache = TRUE)
+  old_opts <- options(tigris_use_cache = TRUE)
+  on.exit(options(old_opts), add = TRUE)
 
   tx <- get_acs(
     geography = "tract",
@@ -404,12 +405,14 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 
 } else {
   cat("Plotting with base R (install ggplot2 for better plots)...\n")
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar), add = TRUE)
   par(mfrow = c(2, 2))
   plot(result_skater[".region"], main = "SKATER")
   plot(result_ward[".region"], main = "Ward Spatial")
   plot(result_maxp[".region"], main = "Max-P")
   plot(result_azp[".region"], main = "AZP")
-  par(mfrow = c(1, 1))
+  par(oldpar)
   cat("   Plots displayed\n\n")
 }
 

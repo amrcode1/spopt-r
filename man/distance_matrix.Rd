@@ -33,7 +33,7 @@ For projected coordinate systems, uses fast Euclidean distance in the CRS units
 (typically meters).
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 demand <- st_as_sf(data.frame(x = runif(10), y = runif(10)), coords = c("x", "y"))
 facilities <- st_as_sf(data.frame(x = runif(5), y = runif(5)), coords = c("x", "y"))

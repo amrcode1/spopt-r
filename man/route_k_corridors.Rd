@@ -120,7 +120,7 @@ against the rank-1 path to answer the planning question: "how different is
 this alternative from the route we would build first?"
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra); library(sf)
 r <- rast(nrows = 200, ncols = 200, xmin = 0, xmax = 200000,
           ymin = 0, ymax = 200000, crs = "EPSG:32614")

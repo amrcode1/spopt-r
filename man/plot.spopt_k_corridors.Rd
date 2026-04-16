@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments passed to the initial \code{plot()} call.}
 }
+\value{
+No return value, called for side effects (draws the corridors to
+the active graphics device).
+}
 \description{
 Renders all k corridors on a single plot. Rank 1 is drawn with full opacity
 and maximum line width; higher ranks fade and thin proportionally.

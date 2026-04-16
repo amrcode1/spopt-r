@@ -32,7 +32,7 @@ of the raster (for coordinate mapping). The printed \code{graph_storage}
 reflects only the CSR arrays, not the raster copy.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 r <- rast(nrows = 500, ncols = 500, xmin = 0, xmax = 500000,
           ymin = 0, ymax = 500000, crs = "EPSG:32614")

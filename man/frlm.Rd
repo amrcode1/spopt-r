@@ -86,7 +86,7 @@ For simple cases, you can provide:
 }
 
 \examples{
-\dontrun{
+\donttest{
 # Simple example with distance matrix
 library(sf)
 

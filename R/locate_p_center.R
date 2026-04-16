@@ -70,7 +70,7 @@
 #' [p_median()] instead.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #'
 #' demand <- st_as_sf(data.frame(x = runif(50), y = runif(50)), coords = c("x", "y"))

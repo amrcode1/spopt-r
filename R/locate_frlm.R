@@ -61,7 +61,7 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Simple example with distance matrix
 #' library(sf)
 #'

@@ -104,7 +104,7 @@ competitive areas where multiple stores have similar probabilities.
 }
 
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 
 # Create demand grid with spending potential

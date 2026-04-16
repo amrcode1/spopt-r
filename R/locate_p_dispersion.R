@@ -49,7 +49,7 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #'
 #' facilities <- st_as_sf(data.frame(x = runif(20), y = runif(20)), coords = c("x", "y"))
