@@ -43,14 +43,20 @@ reflects only the CSR arrays, not the raster copy.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(terra)
+#> terra 1.9.11
 r <- rast(nrows = 500, ncols = 500, xmin = 0, xmax = 500000,
           ymin = 0, ymax = 500000, crs = "EPSG:32614")
 values(r) <- runif(ncell(r), 0.5, 2.0)
 
 g <- corridor_graph(r, neighbours = 8L)
 print(g)
+#> Corridor graph
+#>   Grid: 500 x 500 (250,000 cells)
+#>   Cell size: 1000.0 x 1000.0
+#>   Neighbours: 8 (1,994,004 edges)
+#>   Build time: 0.008s | Graph storage: ~33.9 MB
 path <- route_corridor(g, c(50000, 50000), c(450000, 450000))
-} # }
+# }
 ```

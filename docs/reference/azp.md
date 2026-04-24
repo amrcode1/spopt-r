@@ -148,9 +148,18 @@ geography. Environment and Planning A, 27(3), 425-446.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
+#> Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+#> Reading layer `nc' from data source 
+#>   `/Users/kylewalker/Library/R/arm64/4.5/library/sf/shape/nc.shp' 
+#>   using driver `ESRI Shapefile'
+#> Simple feature collection with 100 features and 14 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#> Geodetic CRS:  NAD27
 
 # Basic AZP with 8 regions
 result <- azp(nc, attrs = c("SID74", "SID79"), n_regions = 8)
@@ -165,5 +174,6 @@ result <- azp(nc, attrs = c("SID74", "SID79"), n_regions = 8,
 
 # View results
 plot(result[".region"])
-} # }
+
+# }
 ```

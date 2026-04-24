@@ -91,12 +91,21 @@ The result guarantees that all regions are spatially contiguous.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+#> Reading layer `nc' from data source 
+#>   `/Users/kylewalker/Library/R/arm64/4.5/library/sf/shape/nc.shp' 
+#>   using driver `ESRI Shapefile'
+#> Simple feature collection with 100 features and 14 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#> Geodetic CRS:  NAD27
 
 # Cluster into 8 spatially-contiguous regions
 result <- ward_spatial(nc, attrs = c("SID74", "SID79"), n_regions = 8)
 plot(result[".region"])
-} # }
+
+# }
 ```

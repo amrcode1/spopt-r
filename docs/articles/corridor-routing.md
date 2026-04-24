@@ -231,7 +231,7 @@ path
       Path distance: 31230
       Cells traversed: 883
       Sinuosity: 1.282
-      Solve time: 0.354 s
+      Solve time: 0.328 s
 
 The returned object is an sf LINESTRING with several useful columns.
 `total_cost` is the accumulated friction along the path, a relative
@@ -304,7 +304,7 @@ alternatives
     k-Diverse Corridor Routing (spopt)
       Corridors found: 5 of 5 requested
       Penalty: 2.0x within 1217.8 of each prior path
-      Routing time: 2.610s (solve: 2.224s, graph build: 0.386s)
+      Routing time: 2.216s (solve: 1.862s, graph build: 0.354s)
 
                              Cost    Distance  Sinuosity     Spacing  Overlap
       Optimal             101,740       31230      1.282           -        -
@@ -400,7 +400,7 @@ g
       Grid: 1502 x 1463 (2,197,426 cells)
       Cell size: 29.6 x 29.6
       Neighbours: 8 (17,473,816 edges)
-      Build time: 0.075s | Graph storage: ~297.2 MB
+      Build time: 0.069s | Graph storage: ~297.2 MB
 
 The graph object is a snapshot of the cost surface at build time. Once
 built, any number of origin-destination pairs can be routed on it

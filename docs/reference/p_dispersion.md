@@ -93,7 +93,7 @@ p-Dispersion and Maxisum Dispersion Problems. Geographical Analysis,
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 
 facilities <- st_as_sf(data.frame(x = runif(20), y = runif(20)), coords = c("x", "y"))
@@ -103,5 +103,6 @@ result <- p_dispersion(facilities, n_facilities = 5)
 
 # Minimum distance between any two selected facilities
 attr(result, "spopt")$min_distance
-} # }
+#> [1] 0.4609159
+# }
 ```

@@ -129,7 +129,7 @@ for minimizing total weighted distance (efficiency objective)
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 
 demand <- st_as_sf(data.frame(x = runif(50), y = runif(50)), coords = c("x", "y"))
@@ -140,5 +140,6 @@ result <- p_center(demand, facilities, n_facilities = 4)
 
 # Maximum distance any demand point must travel
 attr(result, "spopt")$max_distance
-} # }
+#> [1] 0.3861541
+# }
 ```

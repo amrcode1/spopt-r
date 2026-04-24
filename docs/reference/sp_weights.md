@@ -68,9 +68,17 @@ them useful for datasets with islands or disconnected polygons.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+#> Reading layer `nc' from data source 
+#>   `/Users/kylewalker/Library/R/arm64/4.5/library/sf/shape/nc.shp' 
+#>   using driver `ESRI Shapefile'
+#> Simple feature collection with 100 features and 14 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#> Geodetic CRS:  NAD27
 
 # Queen contiguity (default)
 w_queen <- sp_weights(nc, type = "queen")
@@ -81,5 +89,5 @@ w_knn <- sp_weights(nc, type = "knn", k = 6)
 # Distance-based (e.g., 50km for projected data)
 nc_proj <- st_transform(nc, 32119)  # NC State Plane
 w_dist <- sp_weights(nc_proj, type = "distance", d = 50000)
-} # }
+# }
 ```

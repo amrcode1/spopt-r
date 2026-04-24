@@ -234,9 +234,17 @@ Transactions in GIS, 26, 717-734.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+#> Reading layer `nc' from data source 
+#>   `/Users/kylewalker/Library/R/arm64/4.5/library/sf/shape/nc.shp' 
+#>   using driver `ESRI Shapefile'
+#> Simple feature collection with 100 features and 14 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#> Geodetic CRS:  NAD27
 
 # Create regions where each has at least 100,000 in BIR74
 result <- max_p_regions(
@@ -248,6 +256,7 @@ result <- max_p_regions(
 
 # Check number of regions created
 attr(result, "spopt")$n_regions
+#> [1] 3
 
 # With compactness optimization (for sales territories)
 result_compact <- max_p_regions(
@@ -261,9 +270,11 @@ result_compact <- max_p_regions(
 
 # Check compactness
 attr(result_compact, "spopt")$mean_compactness
+#> [1] 0.1982033
 
 # Plot results
 plot(result[".region"])
+
 
 # Point-based regionalization (e.g., store locations, sensor networks)
 # Use KNN weights since points don't have polygon contiguity
@@ -281,5 +292,8 @@ result_points <- max_p_regions(
   weights = list(type = "knn", k = 6),
   compact = TRUE
 )
-} # }
+#> Error: max_p_regions: graph has 2 disconnected components.
+#> Set `bridge_islands = TRUE` to automatically connect them using nearest-neighbor edges,
+#> or provide a connected weights object (e.g., KNN weights).
+# }
 ```

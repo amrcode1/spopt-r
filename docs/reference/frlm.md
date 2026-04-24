@@ -125,7 +125,7 @@ Transactions, 44(8), 622-636.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # Simple example with distance matrix
 library(sf)
 
@@ -148,5 +148,12 @@ result <- frlm(flows, candidates, vehicle_range = 50, n_facilities = 3)
 
 # View selected facilities
 result$facilities[result$facilities$.selected, ]
-} # }
+#> Simple feature collection with 1 feature and 2 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: 84.50706 ymin: 64.51147 xmax: 84.50706 ymax: 64.51147
+#> CRS:           NA
+#>   id                  geometry .selected
+#> 1  1 POINT (84.50706 64.51147)      TRUE
+# }
 ```

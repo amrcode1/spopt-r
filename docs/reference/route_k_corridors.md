@@ -196,7 +196,7 @@ for cached graph routing with multiple OD pairs
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(terra); library(sf)
 r <- rast(nrows = 200, ncols = 200, xmin = 0, xmax = 200000,
           ymin = 0, ymax = 200000, crs = "EPSG:32614")
@@ -205,10 +205,22 @@ values(r) <- runif(ncell(r), 0.5, 2.0)
 # Find 5 diverse alternatives
 result <- route_k_corridors(r, c(10000, 10000), c(190000, 190000), k = 5)
 print(result)
+#> k-Diverse Corridor Routing (spopt)
+#>   Corridors found: 5 of 5 requested
+#>   Penalty: 2.0x within 12727.9 of each prior path
+#>   Routing time: 0.025s (solve: 0.019s, graph build: 0.006s)
+#> 
+#>                          Cost    Distance  Sinuosity     Spacing  Overlap
+#>   Optimal             232,860      277889      1.092           -        -
+#>   Alternative 1       248,368      301161      1.183     16465.5    13.9%
+#>   Alternative 2       270,232      319304      1.254     21895.1    10.1%
+#>   Alternative 3       281,949      329889      1.296     34004.1     9.3%
+#>   Alternative 4       297,476      344960      1.355     35118.9     9.2%
 plot(result)
+
 
 # Enforce minimum geographic separation between alternatives
 result <- route_k_corridors(r, c(10000, 10000), c(190000, 190000),
                             k = 5, min_spacing = 10000)
-} # }
+# }
 ```

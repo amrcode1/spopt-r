@@ -124,7 +124,7 @@ finding the minimum facilities needed for complete coverage
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 
 # Create demand with weights
@@ -138,5 +138,6 @@ result <- mclp(demand, facilities, service_radius = 0.3,
                n_facilities = 3, weight_col = "population")
 
 attr(result, "spopt")$coverage_pct
-} # }
+#> [1] 84.38126
+# }
 ```

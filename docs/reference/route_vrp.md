@@ -156,7 +156,7 @@ for single-vehicle routing
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 
 # Depot + 20 customers with demands
@@ -172,8 +172,10 @@ result <- route_vrp(locations, depot = 1, demand_col = "demand", vehicle_capacit
 
 # How many vehicles needed?
 attr(result, "spopt")$n_vehicles
+#> [1] 6
 
 # Per-vehicle costs
 attr(result, "spopt")$vehicle_costs
-} # }
+#> [1] 1.11 0.90 1.03 1.15 1.35 1.40
+# }
 ```

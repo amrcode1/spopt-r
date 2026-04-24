@@ -22,3 +22,8 @@ plot(x, ...)
 
   Additional arguments passed to the initial
   [`plot()`](https://rspatial.github.io/terra/reference/plot.html) call.
+
+## Value
+
+No return value, called for side effects (draws the corridors to the
+active graphics device).

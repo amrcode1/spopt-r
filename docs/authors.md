@@ -14,12 +14,12 @@ Source:
 
 Walker K (2026). *spopt: Spatial Optimization for Regionalization,
 Facility Location, and Market Analysis*. R package version 0.1.2,
-<https://walker-data.com/spopt-r>.
+<https://walker-data.com/spopt-r/>.
 
     @Manual{,
       title = {spopt: Spatial Optimization for Regionalization, Facility Location, and Market Analysis},
       author = {Kyle Walker},
       year = {2026},
       note = {R package version 0.1.2},
-      url = {https://walker-data.com/spopt-r},
+      url = {https://walker-data.com/spopt-r/},
     }

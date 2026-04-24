@@ -129,9 +129,17 @@ Journal of Geographical Information Science, 35(11), 2356-2373.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+#> Reading layer `nc' from data source 
+#>   `/Users/kylewalker/Library/R/arm64/4.5/library/sf/shape/nc.shp' 
+#>   using driver `ESRI Shapefile'
+#> Simple feature collection with 100 features and 14 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#> Geodetic CRS:  NAD27
 
 # Basic SPENC with 8 regions
 result <- spenc(nc, attrs = c("SID74", "SID79"), n_regions = 8)
@@ -141,5 +149,6 @@ result <- spenc(nc, attrs = c("SID74", "SID79"), n_regions = 8, gamma = 0.5)
 
 # View results
 plot(result[".region"])
-} # }
+
+# }
 ```

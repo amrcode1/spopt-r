@@ -8,7 +8,7 @@ Authors@R: c(
            comment = "Original Python spopt library")
   )
 Description: Implements spatial optimization algorithms across several
-    problem families: contiguity-constrained regionalization, discrete
+    problem families including contiguity-constrained regionalization, discrete
     facility location, market share analysis, and least-cost corridor and
     route optimization over raster cost surfaces. Facility location
     problems also accept user-supplied network travel-time matrices. Uses

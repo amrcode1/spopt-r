@@ -8,14 +8,20 @@ R users with an sf-first API, a Rust backend for graph and routing
 algorithms, and the [HiGHS](https://cran.r-project.org/package=highs)
 solver for facility location.
 
-Install from r-universe:
+Install the official release from CRAN:
+
+``` r
+install.packages("spopt")
+```
+
+Or, install the development version from r-universe:
 
 ``` r
 install.packages('spopt', repos = c('https://walkerke.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 For developers who need to build from source (requires Rust), see
-[CONTRIBUTING.md](https://walker-data.com/spopt-r/CONTRIBUTING.md).
+[CONTRIBUTING.md](https://github.com/walkerke/spopt-r/blob/main/CONTRIBUTING.md).
 
 Read through these vignettes to learn how to use the package:
 

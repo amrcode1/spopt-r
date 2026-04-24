@@ -104,7 +104,7 @@ maximizing coverage with a fixed number of facilities
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 
 # Create demand and facility points
@@ -116,5 +116,17 @@ result <- lscp(demand, facilities, service_radius = 0.3)
 
 # View selected facilities
 result$facilities[result$facilities$.selected, ]
-} # }
+#> Simple feature collection with 6 features and 2 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: 0.07664672 ymin: 0.03393387 xmax: 0.9433377 ymax: 0.8543107
+#> CRS:           NA
+#>                         geometry .selected .n_assigned
+#> 1     POINT (0.871377 0.6559909)      TRUE          10
+#> 3  POINT (0.07664672 0.03393387)      TRUE           8
+#> 5    POINT (0.9433377 0.5206516)      TRUE           4
+#> 7    POINT (0.3706833 0.3162807)      TRUE           9
+#> 9     POINT (0.138154 0.8543107)      TRUE           9
+#> 10   POINT (0.6074349 0.1576129)      TRUE           7
+# }
 ```

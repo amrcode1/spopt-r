@@ -121,7 +121,7 @@ for minimizing maximum distance (equity objective)
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(sf)
 
 demand <- st_as_sf(data.frame(
@@ -134,5 +134,6 @@ result <- p_median(demand, facilities, n_facilities = 5, weight_col = "populatio
 
 # Mean distance to assigned facility
 attr(result, "spopt")$mean_distance
-} # }
+#> [1] 0.1604534
+# }
 ```

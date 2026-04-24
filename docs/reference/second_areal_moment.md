@@ -59,11 +59,13 @@ National Defense Research and Development Technical Memorandum 87/209.
 Li, W., Goodchild, M.F., and Church, R.L. 2013. "An Efficient Measure of
 Compactness for Two-Dimensional Shapes and Its Application in
 Regionalization Problems." International Journal of Geographical
-Information Science 27 (6): 1227–50. <doi:10.1080/13658816.2012.752093>.
+Information Science 27 (6): 1227–50.
+[doi:10.1080/13658816.2012.752093](https://doi.org/10.1080/13658816.2012.752093)
+.
 
 Rey, Sergio J., and Luc Anselin. 2007. "PySAL: A Python Library of
 Spatial Analytical Methods." Review of Regional Studies 37 (1): 5–27.
-[https:/​/​doi.org/​10.52324/​001c.8285](https:/%E2%80%8B/%E2%80%8Bdoi.org/%E2%80%8B10.52324/%E2%80%8B001c.8285).
+[doi:10.52324/001c.8285](https://doi.org/10.52324/001c.8285) .
 
 ## See also
 
@@ -74,7 +76,6 @@ computes the normalized moment of inertia.
 
 ``` r
 library(sf)
-#> Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
 poly <- st_polygon(list(matrix(c(0,0, 1,0, 1,1, 0,1, 0,0), ncol=2, byrow=TRUE)))
 second_areal_moment(poly)
 #> [1] 0.1666667

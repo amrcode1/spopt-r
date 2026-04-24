@@ -582,7 +582,7 @@ summary(result_tw)
     VRP routes: 26 locations, 6 vehicles (depot: 1)
       Method: 2-opt | Total cost: 229.0 | Improvement: 6.2%
       Capacity: 50 | Time windows: active
-      Solve time: 0.001s
+      Solve time: 0.000s
 
     Per-vehicle summary:
      Vehicle Stops Load Cost  Time
