@@ -156,7 +156,6 @@ route_tsp <- function(locations,
   result <- rust_tsp(
     cost_matrix,
     start - 1L,
-    if (is.null(end)) NULL else end - 1L,
     method,
     earliest_vec,
     latest_vec,
